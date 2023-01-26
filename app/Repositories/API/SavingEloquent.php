@@ -80,8 +80,8 @@ class SavingEloquent {
     public function savingType($type)
     {
         $savingDeposit = SavingDeposit::whereHas('account', function($q) use($type){
-            $q->where('user_id', logged_in_user()->id)->where('type_account', $type);
-        })->get();
+            $q->where('user_id', logged_in_user()->id);
+        })->where('type', $type)->get();
 
         $data = [];
         foreach ($savingDeposit as $key => $value) {

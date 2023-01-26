@@ -68,6 +68,14 @@ Route::group(['middleware' => 'auth:api'], function () {
 			Route::get('/{deposit_id}/history-saving-deposit-transaction', 'SavingController@historySavingDepositTransaction')->name('history-saving-deposit-transaction');
 		});
 
+		Route::group(['prefix' => 'loan'], function() {
+			Route::post('/', 'LoanController@store')->name('loan');
+			Route::get('/list', 'LoanController@listLoan')->name('list-loan');
+			Route::get('/{type_id}/type', 'LoanController@loanType')->name('loan-type');
+			Route::get('/{loan_id}/loan-detail', 'LoanController@loanDetail')->name('loan-detail');
+			Route::get('/{loan_id}/loan-list-financing', 'LoanController@loanListFinancing')->name('loan-list-financing');
+		});
+
 
 	});
 
