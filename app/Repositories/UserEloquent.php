@@ -19,4 +19,12 @@ class UserEloquent {
 
        return Employee::find($id);
     }
+
+    public function store($data)
+    {
+        return Employee::create([
+            'name' => $data['name'],
+            'email' => 
+        ]);
+    }
 }

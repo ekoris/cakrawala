@@ -25,4 +25,18 @@ class UserController extends Controller
     {
         return view('admin.user.create');
     }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|unique:users',
+            'email' => 'required|email|unique:users',
+        ]);
+
+        try {
+            $this->user->store($request->all());
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
 }
