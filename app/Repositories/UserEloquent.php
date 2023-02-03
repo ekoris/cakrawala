@@ -2,21 +2,21 @@
 
 namespace App\Repositories;
 
-use App\Models\User;
+use App\Models\Employee;
 
 class UserEloquent {
 
     public function fetch($params =[])
     {
-        $query = User::latest();
+        $query = Employee::latest();
 
         return $query->paginate(15);
     }
 
     public function update($data = [], $id)
     {
-       User::where('id', $id)->update($data);
+       Employee::where('id', $id)->update($data);
 
-       return User::find($id);
+       return Employee::find($id);
     }
 }

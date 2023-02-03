@@ -18,7 +18,7 @@
                     <div class="row mb-3">
                         <label for="name" class="col-md-4 col-form-label text-md-end">Username</label>
                         <div class="col-md-8">
-                            <input id="name" type="text" placeholder="inputkan Username" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                            <input type="text" placeholder="inputkan Username" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
                             @error('name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -50,9 +50,21 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <label for="password-confirm" class="col-md-4 col-form-label text-md-end">Password Ulang</label>
+                        <label for="name" class="col-md-4 col-form-label text-md-end">Nama Panggilan</label>
                         <div class="col-md-8">
-                            <input id="password-confirm" type="password" placeholder="Masukkan Password Lagi" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                            <input type="text" placeholder="inputkan Nama Panggilan" class="form-control" name="nickname">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="name" class="col-md-4 col-form-label text-md-end">No Telpon</label>
+                        <div class="col-md-8">
+                            <input type="text" placeholder="inputkan No Telpon" class="form-control" name="phone">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="name" class="col-md-4 col-form-label text-md-end">Alamat</label>
+                        <div class="col-md-8">
+                            <textarea name="address" class="form-control" id="" cols="2" rows="2"></textarea>
                         </div>
                     </div>
                     <div class="row mb-0">

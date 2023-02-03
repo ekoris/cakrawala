@@ -47,13 +47,11 @@
                     <nav>
                         <ul class="metismenu" id="menu">
                            @include('layouts.side-navigation')
+                           <li class=""><a href="maps.html"><i class="fa fa-cog"></i> <span>Profil</span></a></li>
+                           <li class=""><a href="maps.html"><i class="fa fa-sign-out"></i> <span>Signout</span></a></li>
                         </ul>
                     </nav>
                 </div>
-                <ul class="metismenu" id="menu" style=" bottom: 0;width: 100%;position: absolute;padding-bottom:10px" >
-                    <li class=""><a href="maps.html"><i class="fa fa-cog"></i> <span>Profil</span></a></li>
-                    <li class=""><a href="maps.html"><i class="fa fa-sign-out"></i> <span>Signout</span></a></li>
-                </ul>
             </div>
         </div>
         <div class="main-content">
