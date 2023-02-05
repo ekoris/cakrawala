@@ -16,7 +16,9 @@ class LoanEloquent {
 
     public function store($data)
     {
-        $loan = Loan::create($data);
+        $loan = Loan::create(array_merge($data,[
+            'user_id' => logged_in_user()->id
+        ]));
 
         switch ($data['tenor_type']) {
             case '1':

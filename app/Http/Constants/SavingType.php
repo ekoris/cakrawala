@@ -22,4 +22,24 @@ class SavingType
         return static::labels()[$id];
     }
 
+    public static function labelHtml(int $id)
+    {   
+
+        switch ($id) {
+            case '1':
+                return '<span class="badge badge-secondary">'.static::labels()[$id].'</span>';
+                break;
+            case '2':
+                return '<span class="badge badge-primary">'.static::labels()[$id].'</span>';
+                break;
+            case '3':
+                return '<span class="badge badge-info">'.static::labels()[$id].'</span>';
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+    }
+
 }

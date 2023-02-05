@@ -4,6 +4,7 @@ namespace App\Repositories\API;
 
 use App\Http\Constants\SavingTransactionStatus;
 use App\Http\Constants\SavingType;
+use App\Http\Constants\StatusAccount;
 use App\Http\Constants\TypeAccount;
 use App\Models\SavingDeposit;
 use App\Models\SavingDepositTransaction;
@@ -18,7 +19,8 @@ class SavingEloquent {
                     'type' => $data['type']
                 ],[
                     'account_id' => $data['account_id'],
-                    'type' => $data['type']
+                    'type' => $data['type'],
+                    'user_id' => logged_in_user()->id
                 ]
             );
 
@@ -40,9 +42,8 @@ class SavingEloquent {
 
         return [
             'account_id' => $savingDeposit->account_id,
-            'account_name' => $savingDeposit->account->name,
-            'account_user_id' => $savingDeposit->account->user_id,
-            'account_user_name' => $savingDeposit->account->user->name,
+            'user_id' => $savingDeposit->user_id,
+            'user_name' => $savingDeposit->account->user->name,
             'type_saving' => $savingDeposit->type,
             'type_saving_label' => SavingType::label($savingDeposit->type),
             'total_balance' => $savingDeposit->total_balance,
@@ -54,17 +55,32 @@ class SavingEloquent {
 
     public function listSaving($data = [])
     {
-        $savingDeposit = SavingDeposit::whereHas('account', function($q){
-            $q->where('user_id', logged_in_user()->id)->where('type_account', TypeAccount::SAVING);
-        })->get();
+        $savingDeposit = SavingDeposit::where('user_id', logged_in_user()->id)->get();
 
         $data = [];
         foreach ($savingDeposit as $key => $value) {
+            $account = $value->account;
             $data[] = [
-                    'account_id' => $value->account_id,
-                    'account_name' => $value->account->name,
-                    'account_user_id' => $value->account->user_id,
-                    'account_user_name' => $value->account->user->name,
+                    'user_id' => $value->user_id,
+                    'user_name' => $value->account->user->name,
+                    'account' => [
+                        'id' => $value->account->id,
+                        'name' => $account->name,
+                        'date_of_birth' => $account->date_of_birth,
+                        'place_of_birth' => $account->place_of_birth,
+                        'nik' => $account->nik,
+                        'address' => $account->address,
+                        'account_officer' => $account->account_officer,
+                        'market_id' => $account->market_id,
+                        'market_name' => optional($account->market)->name,
+                        'identity_attachment_url' => $account->url_identity_attachment,
+                        'self_photo_url' => $account->url_self_photo,
+                        'signature_photo_url' => $account->url_signature_photo,
+                        'status' => $account->status,
+                        'status_label' => StatusAccount::label($account->status),
+                        'type_account' => $account->type_account,
+                        'type_account_label' => TypeAccount::label($account->type_account)
+                    ],
                     'type_saving' => $value->type,
                     'type_saving_label' => SavingType::label($value->type),
                     'total_balance' => $value->total_balance,
@@ -79,18 +95,33 @@ class SavingEloquent {
 
     public function savingType($type)
     {
-        $savingDeposit = SavingDeposit::whereHas('account', function($q) use($type){
-            $q->where('user_id', logged_in_user()->id);
-        })->where('type', $type)->get();
+        $savingDeposit = SavingDeposit::where('user_id', logged_in_user()->id)->where('type', $type)->get();
 
         $data = [];
         foreach ($savingDeposit as $key => $value) {
+            $account = $value->account;
             $data[] = [
                     'id' => $value->id,
-                    'account_id' => $value->account_id,
-                    'account_name' => $value->account->name,
-                    'account_user_id' => $value->account->user_id,
-                    'account_user_name' => $value->account->user->name,
+                    'user_id' => $value->user_id,
+                    'user_name' => $value->account->user->name,
+                    'account' => [
+                        'id' => $value->account->id,
+                        'name' => $account->name,
+                        'date_of_birth' => $account->date_of_birth,
+                        'place_of_birth' => $account->place_of_birth,
+                        'nik' => $account->nik,
+                        'address' => $account->address,
+                        'account_officer' => $account->account_officer,
+                        'market_id' => $account->market_id,
+                        'market_name' => optional($account->market)->name,
+                        'identity_attachment_url' => $account->url_identity_attachment,
+                        'self_photo_url' => $account->url_self_photo,
+                        'signature_photo_url' => $account->url_signature_photo,
+                        'status' => $account->status,
+                        'status_label' => StatusAccount::label($account->status),
+                        'type_account' => $account->type_account,
+                        'type_account_label' => TypeAccount::label($account->type_account)
+                    ],
                     'type_saving' => $value->type,
                     'type_saving_label' => SavingType::label($value->type),
                     'total_balance' => $value->total_balance,
@@ -106,13 +137,34 @@ class SavingEloquent {
     public function findBySavingDepositId($savingDepositId)
     {
         $savingDeposit = SavingDeposit::find($savingDepositId);
+        if (!$savingDeposit) {
+            return 'Id Tidak Ditemukan';    
+        }
+
+        $account = $savingDeposit->account ?? [];
 
         return [
                 'id' => $savingDeposit->id,
-                'account_id' => $savingDeposit->account_id,
-                'account_name' => $savingDeposit->account->name,
-                'account_user_id' => $savingDeposit->account->user_id,
-                'account_user_name' => $savingDeposit->account->user->name,
+                'user_id' => $savingDeposit->user_id,
+                'user_name' => $savingDeposit->account->user->name,
+                'account' => [
+                    'id' => $account->id,
+                    'name' => $account->name,
+                    'date_of_birth' => $account->date_of_birth,
+                    'place_of_birth' => $account->place_of_birth,
+                    'nik' => $account->nik,
+                    'address' => $account->address,
+                    'account_officer' => $account->account_officer,
+                    'market_id' => $account->market_id,
+                    'market_name' => optional($account->market)->name,
+                    'identity_attachment_url' => $account->url_identity_attachment,
+                    'self_photo_url' => $account->url_self_photo,
+                    'signature_photo_url' => $account->url_signature_photo,
+                    'status' => $account->status,
+                    'status_label' => StatusAccount::label($account->status),
+                    'type_account' => $account->type_account,
+                    'type_account_label' => TypeAccount::label($account->type_account)
+                ],
                 'type_saving' => $savingDeposit->type,
                 'type_saving_label' => SavingType::label($savingDeposit->type),
                 'total_balance' => $savingDeposit->total_balance,

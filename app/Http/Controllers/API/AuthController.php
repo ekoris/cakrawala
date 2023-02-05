@@ -29,6 +29,7 @@ class AuthController extends Controller
                 'otp_expired' => $date,
                 'phone' => $request->phone,
                 'address' => $request->address,
+                'is_employee' => 0,
             ]);
             return response()->json(['message' => 'Register Success, Cek OTP'], 200);
         } catch (\Throwable $th) {
@@ -76,6 +77,8 @@ class AuthController extends Controller
 
                 $token = auth()->user()->createToken('cakrawala')->accessToken;
                 return response()->json(['token' => $token], 200);
+            }elseif (logged_in_user()->is_employee != 0) {
+                return response()->json(['message' => 'Kamu bukan Pengguna, Silahkan Login Menggunakan Akun pengguna'], 401);
             }elseif($dateNow > $date && logged_in_user()->otp_code == $request->otp ){
                 $otp = random_int(1000, 9999);
                 $date = new DateTime();

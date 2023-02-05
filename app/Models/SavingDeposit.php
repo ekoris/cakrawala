@@ -16,12 +16,17 @@ class SavingDeposit extends Model
 
     public function lastUpdateUser()
     {
-        return $this->belongsTo(User::class,'last_updated_by');
+        return $this->belongsTo(User::class,'last_update_by');
     }
 
     public function savingDepositTransactions()
     {
-        return $this->hasMany(SavingDepositTransaction::class);
+        return $this->hasMany(SavingDepositTransaction::class,'saving_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
 }
