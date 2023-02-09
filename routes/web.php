@@ -88,13 +88,31 @@ Route::group(['middleware' => 'auth'], function () {
             });
         });
 
+        Route::group(['prefix' => 'product','as' => 'product.'], function() {
+            Route::get('/', 'ProductController@index')->name('index');
+            Route::get('/create', 'ProductController@create')->name('create');
+            Route::post('/store', 'ProductController@store')->name('store');
+            Route::get('/{id}/edit', 'ProductController@edit')->name('edit');
+            Route::get('/{id}/delete', 'ProductController@delete')->name('delete');
+        });
+
         Route::group(['prefix' => 'loan','as' => 'loan.'], function() {
             Route::group(['as' => 'all-data.'], function() {
                 Route::get('/all-data', 'LoanController@allData')->name('index');
+                Route::get('{id}/show/{type}', 'LoanController@show')->name('show');
+                Route::get('{id}/show/{type}/submit-transaction/{transaksi_id}/{status}', 'LoanController@submitTransaction')->name('submit');
+            });
+
+            Route::group(['as' => 'transaction.'], function() {
+                Route::get('/transaction', 'LoanController@transaction')->name('index');
+                Route::get('/transaction/{id}/submit/{status}', 'LoanController@transactionSubmit')->name('submit');
+                Route::get('/{id}/edit-transaction', 'LoanController@editTransaction')->name('edit-transaction');
+                Route::post('/{id}/update-transaction', 'LoanController@updateTransaction')->name('update-transaction');
             });
             
             Route::group(['as' => 'new.'], function() {
                 Route::get('/new', 'LoanController@newLoan')->name('index');
+                Route::get('/{id}/submit/{status}', 'LoanController@submit')->name('submit');
             });
         });
     });

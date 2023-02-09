@@ -4,8 +4,12 @@ namespace App\Repositories;
 
 use App\Http\Constants\HistoryTransactionStatus;
 use App\Http\Constants\LoanMainStatus;
+use App\Http\Constants\LoanStatus;
+use App\Http\Constants\LoanTransactionStatus;
 use App\Models\Customer;
 use App\Models\Loan;
+use App\Models\LoanListFinancing;
+use App\Models\LoanListTransaction;
 use App\Models\SavingDeposit;
 use App\Models\SavingDepositTransaction;
 use Illuminate\Support\Facades\DB;
@@ -26,6 +30,16 @@ class LoanEloquent {
 
         return $query->paginate(15);
     }
+
+    public function find($id)
+    {
+        return Loan::find($id);
+    }
+
+    public function findLoanExist($userId, $type)
+    {
+        return Loan::where('user_id', $userId)->whereIn('status', [2])->where('type', $type)->get();
+    }
     
     public function fetchLoanNew($params = [])
     {
@@ -36,6 +50,133 @@ class LoanEloquent {
         }
 
         return $query->paginate(15);
+    }
+
+    public function submit($id, $status)
+    {
+        return Loan::where('id', $id)->update([
+            'status' => $status
+        ]);
+    }
+
+    public function detailLoan($id, $type)
+    {
+        return Loan::addSelect(
+
+                \DB::raw(' loans.*, 
+                    ( select sum(total_installment) from loan_list_financings where loan_id = loans.id and status = 1 ) as total_unpaid,
+                    ( select sum(total_installment) from loan_list_financings where loan_id = loans.id and status = 2 ) as total_paid ')
+            )
+            ->with('account')
+            ->where('user_id', $id)
+            ->where('type', $type)
+            ->first();
+    }
+
+    public function listLoanFinancing($params = [], $loanId)
+    {
+        $query = LoanListFinancing::query()->where('loan_id', $loanId);
+
+        return $query->paginate(15);
+    }
+
+    public function listLoanTransaction($params, $loanId)
+    {
+        $query = LoanListTransaction::query()->whereHas('LoanListFinancing', function($q) use($loanId){
+            $q->where('loan_id', $loanId);
+        });
+
+        return $query->paginate(15);
+    }
+
+    public function submitTransaction($transactionId, $status)
+    {
+        $loanListTransaction = LoanListTransaction::find($transactionId);
+        if ($status == 2) {
+            LoanListTransaction::where('id', $loanListTransaction->id)->update([
+                'status' => 2,
+                'approver_id' => logged_in_user()->id
+            ]);
+
+            LoanListFinancing::where('id', $loanListTransaction->loan_list_financing_id)->update([
+                'status' => LoanStatus::PAID
+            ]);
+        }else{
+            LoanListTransaction::where('id', $loanListTransaction->id)->update([
+                'status' => 3,
+                'approver_id' => logged_in_user()->id
+            ]);
+
+            if ($loanListTransaction->loanListFinancing->status != LoanStatus::PAID) {
+                LoanListFinancing::where('id', $loanListTransaction->loan_list_financing_id)->update([
+                    'status' => LoanStatus::NOT_PAID
+                ]);
+            }
+        }
+
+        $this->finisLoan($loanListTransaction->loanListFinancing->loan_id);
+
+    }
+
+    public function newTransaction($params = [])
+    {
+        $query = LoanListTransaction::query()->where('status', LoanTransactionStatus::PENDING);
+
+        return $query->paginate(15);
+    }
+
+    public function findTransaction($id)
+    {
+        return LoanListTransaction::find($id);
+    }
+
+    public function loanFinancingNotPaid($loanId)
+    {
+        return LoanListFinancing::where('loan_id', $loanId)->where('status', LoanStatus::NOT_PAID)->get();
+    }
+
+    public function updateTransaction($transactionId, $listLoanNew, $status)
+    {
+        $loanListTransaction = LoanListTransaction::find($transactionId);
+        if ($status == 1) {
+            LoanListTransaction::where('id', $loanListTransaction->id)->update([
+                'status' => 2,
+                'approver_id' => logged_in_user()->id
+            ]);
+
+            LoanListFinancing::where('id', $listLoanNew)->update([
+                'status' => LoanStatus::PAID
+            ]);
+        }else{
+            LoanListTransaction::where('id', $loanListTransaction->id)->update([
+                'status' => 3,
+                'approver_id' => logged_in_user()->id
+            ]);
+
+            if ($loanListTransaction->loanListFinancing->status != LoanStatus::PAID) {
+                LoanListFinancing::where('id', $listLoanNew)->update([
+                    'status' => LoanStatus::NOT_PAID
+                ]);
+            }
+
+        }
+
+        $this->finisLoan($loanListTransaction->loanListFinancing->loan_id);
+
+        return $loanListTransaction->update([
+            'loan_list_financing_id' => $listLoanNew
+        ]);
+    }
+
+    public function finisLoan($loanId)
+    {
+        $cekLoanPaid = LoanListFinancing::where('loan_id', $loanId)->where('status', LoanStatus::PAID)->get();
+        $cekAllLoan = LoanListFinancing::where('loan_id', $loanId)->get();
+        if ($cekLoanPaid == $cekAllLoan) {
+            Loan::where('id', $loanId)->update([
+                'status' => LoanMainStatus::DONE
+            ]);
+        }
     }
   
 }

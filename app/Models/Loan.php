@@ -14,6 +14,11 @@ class Loan extends Model
         return $this->belongsTo(Account::class);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id');
+    }
+
     public function collateral()
     {
         return $this->belongsTo(Collateral::class);

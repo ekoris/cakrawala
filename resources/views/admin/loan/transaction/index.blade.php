@@ -3,6 +3,7 @@
 @php
 use App\Http\Constants\SavingType;
 use App\Http\Constants\HistoryTransactionStatus;
+use App\Http\Constants\LoanType;
 @endphp
 
 @push('breadcumb')
@@ -22,19 +23,11 @@ use App\Http\Constants\HistoryTransactionStatus;
                     <div class="d-md-flex justify-content-md-end" style="padding-bottom: 15px">
                         <div class="" style="padding-right: 10px">
                             <select name="type" class="form-control form-control-sm" id="">
-                                <option value="" selected>Pilih Simpanan</option>
-                                @foreach (SavingType::labels() as $key => $item)
-                                <option value="{{ $key }}" {{ Request::get('type') == $key ? 'selected' : '' }}>{{ $item }}</option>
+                                <option value="" selected>Pilih Pinjaman</option>
+                                @foreach (LoanType::labels() as $key => $item)
+                                    <option value="{{ $key }}" {{ Request::get('type') == $key ? 'selected' : '' }}>{{ $item }}</option>
                                 @endforeach
                             </select>
-                        </div>
-                        <div class="" style="padding-right: 10px">
-                            <select name="status" class="form-control form-control-sm" id="">
-                                <option value="" selected>Pilih Pasar</option>
-                            </select>
-                        </div>
-                        <div class="" style="padding-right: 10px">
-                            <input type="date" name="date" value="{{ Request::get('date') }}" class="form-control form-control-sm">
                         </div>
                         <div class="" style="padding-right: 10px">
                             <input type="text" name="q"  placeholder="cari nama akun" value="{{ Request::get('q') }}" class="form-control form-control-sm">
@@ -53,11 +46,12 @@ use App\Http\Constants\HistoryTransactionStatus;
                             <thead class="text-uppercase bg-dark">
                                 <tr class="text-white">
                                     <th witdh="10px" style="width: 20px !important">Aksi</th>
-                                    <th>Nama Akun</th>
-                                    <th>Nama Pasar</th>
-                                    <th>Tipe Simpanan</th>
-                                    <th>Total Simpanan</th>
+                                    <th>Nama Peminjam</th>
+                                    <th>Tipe Pinjaman</th>
+                                    <th>Pembayaran Tempo</th>
                                     <th>Tanggal Transaksi</th>
+                                    <th>Total Bayar</th>
+                                    <th>Total Pinjaman</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -65,19 +59,20 @@ use App\Http\Constants\HistoryTransactionStatus;
                                 <tr>
                                     <td>
                                         <div class="btn-group" role="group" aria-label="Basic example">
-                                            <a href="{{ route('admin.saving.transaction-pending.submit', [$item->id, 2]) }}" title="Approve">
+                                            <a href="{{ route('admin.loan.transaction.submit', [$item->id, 2]) }}" title="Approve">
                                                 <button type="button" class="btn btn-sm btn-outline-info"><i class="fa fa-check"></i></button>
                                             </a>
-                                            <a href="{{ route('admin.saving.transaction-pending.submit', [$item->id, 3]) }}" title="Batalkan" style="padding-left: 5px">
+                                            <a href="{{ route('admin.loan.transaction.submit', [$item->id, 3]) }}" title="Batalkan" style="padding-left: 5px">
                                                 <button type="button" class="btn btn-sm btn-outline-info"><i class="fa fa-close"></i></button>
                                             </a>
                                         </div>
                                     </td>
-                                    <td>{{ $item->savingDeposit->user->name }}</td>
-                                    <td>{{ $item->savingDeposit->account->market->name }}</td>
+                                    <td>{{ $item->user->name }}</td>
+                                    <td>{{ LoanType::label($item->loanListFinancing->loan->type) }}</td>
+                                    <td>{{ $item->loanListFinancing->due_date }}</td>
+                                    <td>{{ $item->created_at }}</td>
                                     <td>Rp {{ number_format($item->total,0,',','.') }}</td>
-                                    <td>{!! SavingType::labelHtml($item->savingDeposit->type) !!}</td>
-                                    <td>{{ $item->date_transaction }}</td>
+                                    <td>Rp {{ number_format($item->loanListFinancing->loan->total_loan,0,',','.') }}</td>
                                 </tr>
                                 @empty
                                 <tr>

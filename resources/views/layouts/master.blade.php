@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="{{ asset('assets') }}/css/owl.carousel.min.css">
     <link rel="stylesheet" href="{{ asset('assets') }}/css/slicknav.min.css">
     <!-- amchart css -->
+    <link rel="stylesheet" href="{{ asset('assets/toast/toastr.min.css') }}">
     <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
     <!-- others css -->
     <link rel="stylesheet" href="{{ asset('assets') }}/css/typography.css">
@@ -22,7 +23,6 @@
     <link rel="stylesheet" href="{{ asset('assets') }}/css/responsive.css">
     <!-- modernizr css -->
     <script src="{{ asset('assets') }}/js/vendor/modernizr-2.8.3.min.js"></script>
-
     @stack('style')
 
 </head>
@@ -121,6 +121,34 @@
     <script src="{{ asset('assets') }}/js/plugins.js"></script>
     <script src="{{ asset('assets') }}/js/scripts.js"></script>
     @stack('scripts')
+
+    <script src="{{ asset('assets/toast/toastr.min.js') }}"></script>
+    <script>
+        toastr.options = {
+            "progressBar": true
+        };
+    </script>
+    @stack('toastr')
+    @if(session()->has("notice"))
+        @php
+            $value = Session::get('notice');
+        @endphp
+        @if (is_array($value))
+            <script>
+                @foreach ($value as $data)
+                    @if ($data['labelClass'] == 'success')
+                        toastr["success"]("{{ $data['content'] }}");
+                    @endif
+                    @if ($data['labelClass'] == 'error')
+                        toastr["error"]("{{ $data['content'] }}");
+                    @endif
+                @endforeach
+            </script>
+        @endif
+        @php
+            Session::forget('notice');
+        @endphp
+    @endif
 
 </body>
 

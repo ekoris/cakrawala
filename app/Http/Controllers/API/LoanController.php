@@ -26,6 +26,17 @@ class LoanController extends BaseController
         }
    }
 
+   public function storeBillPayment(Request $request)
+   {
+        try {
+            $loan = $this->loan->storeBillPayment($request->all());
+            return $this->sendResponse($loan, 'Data Berhasil di simpan');
+        } catch (\Throwable $th) {
+            throw $th;
+            return $this->sendError('data error');
+        }
+   }
+
    public function listLoan(Request $request)
    {
         try {

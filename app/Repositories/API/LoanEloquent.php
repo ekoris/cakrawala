@@ -2,12 +2,15 @@
 
 namespace App\Repositories\API;
 
+use App\Http\Constants\LoanMainStatus;
 use App\Http\Constants\LoanStatus;
+use App\Http\Constants\LoanTransactionStatus;
 use App\Http\Constants\LoanType;
 use App\Http\Constants\SavingType;
 use App\Http\Constants\TypeAccount;
 use App\Models\Loan;
 use App\Models\LoanListFinancing;
+use App\Models\LoanListTransaction;
 use DateInterval;
 use DatePeriod;
 use DateTime;
@@ -17,7 +20,8 @@ class LoanEloquent {
     public function store($data)
     {
         $loan = Loan::create(array_merge($data,[
-            'user_id' => logged_in_user()->id
+            'user_id' => logged_in_user()->id,
+            'status' => LoanMainStatus::NEW
         ]));
 
         switch ($data['tenor_type']) {
@@ -44,7 +48,7 @@ class LoanEloquent {
         $start    = date('Y-m-d', strtotime($step));
         $end      =  date('Y-m-d', strtotime($range, strtotime($start)));
         $totalMonthLoan = count($this->dateRange( $start, $end, $step));
-        $totalLoanFinancing = $loan->total_loan / $totalMonthLoan;
+        $totalLoanFinancing = ($loan->total_loan + ($loan->total_loan * 0.04)) / $totalMonthLoan;
         foreach ($this->dateRange( $start, $end, $step) as $value) {
             LoanListFinancing::create([
                 'loan_id' => $loan->id,
@@ -55,6 +59,16 @@ class LoanEloquent {
         }
 
         return $loan;
+    }
+
+    public function storeBillPayment($data)
+    {
+        return LoanListTransaction::create([
+            'loan_list_financing_id' => $data['loan_list_financing_id'],
+            'total' => $data['total'],
+            'user_id' => logged_in_user()->id,
+            'status' => LoanTransactionStatus::PENDING
+        ]);
     }
 
     private function dateRange( $first, $last, $step = '+1 day', $format = 'Y-m-d' ) {

@@ -46,9 +46,9 @@
                                         <td>
                                             <select name="" id="" class="form-control form-control-sm form-control-block" onchange="location = this.value;">
                                                 <option value="" selected disabled>Pilih Detail</option>
-                                                <option value="{{ route('admin.saving.all-data.show', [$item->id, 1]) }}">Detail {{ LoanType::label(1) }}</option>
-                                                <option value="{{ route('admin.saving.all-data.show', [$item->id, 2]) }}">Detail {{ LoanType::label(2) }}</option>
-                                                <option value="{{ route('admin.saving.all-data.show', [$item->id, 3]) }}">Detail {{ LoanType::label(3) }}</option>
+                                                <option value="{{ route('admin.loan.all-data.show', [$item->id, 1]) }}">Detail {{ LoanType::label(1) }}</option>
+                                                <option value="{{ route('admin.loan.all-data.show', [$item->id, 2]) }}">Detail {{ LoanType::label(2) }}</option>
+                                                <option value="{{ route('admin.loan.all-data.show', [$item->id, 3]) }}">Detail {{ LoanType::label(3) }}</option>
                                             </select>
                                         </td>
                                         <td>{{ $item->name }}</td>

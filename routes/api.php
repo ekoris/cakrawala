@@ -70,6 +70,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 		Route::group(['prefix' => 'loan'], function() {
 			Route::post('/', 'LoanController@store')->name('loan');
+			Route::post('/store-bill-payment', 'LoanController@storeBillPayment')->name('store-bill-payment');
 			Route::get('/list', 'LoanController@listLoan')->name('list-loan');
 			Route::get('/{type_id}/type', 'LoanController@loanType')->name('loan-type');
 			Route::get('/{loan_id}/loan-detail', 'LoanController@loanDetail')->name('loan-detail');

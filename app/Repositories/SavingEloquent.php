@@ -44,6 +44,12 @@ class SavingEloquent {
             $query->where('status', $params['status']);
         }
 
+        if (isset($params['q'])) {
+            $query->whereHas('confirmBy', function($q) use($params){
+                $q->where('name', 'like', '%'.$params['q'].'%');
+            });
+        }
+
        return $query->latest()->paginate(15);
     }
 

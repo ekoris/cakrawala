@@ -2,18 +2,18 @@
 
 namespace App\Http\Constants;
 
-class LoanStatus
+class LoanTransactionStatus
 {
-    const NOT_PAID = 1;
+    const PENDING = 1;
     const PAID = 2;
-    const OVER = 3;
+    const CANCELED = 3;
 
     public static function labels(): array
     {
         return [
-            self::NOT_PAID => 'Belum Dibayar',
-            self::PAID => 'Lunas',
-            self::OVER => 'Belum dibayar, Melebihi Batas Waktu',
+            self::PENDING => 'Menunggu di Konfirmasi',
+            self::PAID => 'Dibayarkan',
+            self::CANCELED => 'Dibatalkan',
         ];
     }
 
@@ -33,9 +33,8 @@ class LoanStatus
                 return '<span class="badge badge-success">'.static::labels()[$id].'</span>';
                 break;
             case '3':
-                return '<span class="badge badge-danger">'.static::labels()[$id].'</span>';
+                return '<span class="badge badge-dark">'.static::labels()[$id].'</span>';
                 break;
-            
             default:
                 # code...
                 break;

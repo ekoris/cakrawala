@@ -1,8 +1,8 @@
 @extends('layouts.master')
 
 @php
-use App\Http\Constants\SavingType;
-use App\Http\Constants\HistoryTransactionStatus;
+use App\Http\Constants\LoanStatus;
+use App\Http\Constants\LoanTransactionStatus;
 @endphp
 
 @push('breadcumb')
@@ -22,15 +22,26 @@ use App\Http\Constants\HistoryTransactionStatus;
                     <div class="invoice-head">
                         <div class="row">
                             <div class="iv-left col-12 text-center">
-                                <span>Total Dana Tersimpan</span>
+                                <span>Total Dana Pinjaman</span>
                             </div>
                             <div class="iv-center col-12 text-center">
-                                <span style="color: red">Rp {{ number_format($saving->total_balance,0,'.','.') }}</span>
+                                <span style="color: red">Rp {{ number_format($loan->total_loan,0,'.','.') }}</span>
                             </div>
-                            <div class="iv-left col-12 text-center">
-                                @if ($saving->lastUpdateUser)
-                                    <p>Terakhir di update oleh : <br><i><b>{{ $saving->lastUpdateUser->name.' ('.$saving->last_updated_at.')' }}</b></i></p>
-                                @endif
+                            <div class="col-md-12">
+                                <div class="invoice-address">
+                                    <hr>
+                                    <p class="text-center">Data Transaksi</p>
+                                    <table class="table">
+                                        <tr>
+                                            <td widht="2px">Total Yang Sudah dibayar</td>
+                                            <td>: Rp {{ number_format($loan->total_paid, 0, ',','.') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total Yang Belum dibayar</td>
+                                            <td>: Rp {{ number_format($loan->total_unpaid, 0, ',','.') }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -41,39 +52,39 @@ use App\Http\Constants\HistoryTransactionStatus;
                                 <table class="table">
                                     <tr>
                                         <td>Nama</td>
-                                        <td>: {{ $saving->account->name }}</td>
+                                        <td>: {{ $loan->account->name }}</td>
                                     </tr>
                                     <tr>
                                         <td>Tempat, Tanggal Lahir</td>
-                                        <td>: {{ $saving->account->place_of_birth.', '.$saving->account->date_of_birth }}</td>
+                                        <td>: {{ $loan->account->place_of_birth.', '.$loan->account->date_of_birth }}</td>
                                     </tr>
                                     <tr>
                                         <td>Alamat</td>
-                                        <td>: {{ $saving->account->address }}</td>
+                                        <td>: {{ $loan->account->address }}</td>
                                     </tr>
                                     <tr>
                                         <td>Nama</td>
-                                        <td>: {{ $saving->account->name }}</td>
+                                        <td>: {{ $loan->account->name }}</td>
                                     </tr>
                                     <tr>
                                         <td>NIK</td>
-                                        <td>: {{ $saving->account->nik }}</td>
+                                        <td>: {{ $loan->account->nik }}</td>
                                     </tr>
                                     <tr>
                                         <td>Account Officer</td>
-                                        <td>:  {{ $saving->account->account_officer }}</td>
+                                        <td>:  {{ $loan->account->account_officer }}</td>
                                     </tr>
                                     <tr>
                                         <td>Pasar</td>
-                                        <td>: {{ $saving->account->market->name }}</td>
+                                        <td>: {{ $loan->account->market->name }}</td>
                                     </tr>
                                     <tr>
                                         <td>KTP</td>
-                                        <td>: <a download="" href="{{ $saving->account->url_identity_attachment }}">Download</a></td>
+                                        <td>: <a download="" href="{{ $loan->account->url_identity_attachment }}">Download</a></td>
                                     </tr>
                                     <tr>
                                         <td>Foto Selfie</td>
-                                        <td>: <a download="" href="{{ $saving->account->url_self_photo }}">Download</a></td>
+                                        <td>: <a download="" href="{{ $loan->account->url_self_photo }}">Download</a></td>
                                     </tr>
                                 </table>
                             </div>
@@ -86,74 +97,102 @@ use App\Http\Constants\HistoryTransactionStatus;
     <div class="col-lg-9 mt-5">
         <div class="card">
             <div class="card-body">
-                <form action="" id="form-filter">
-                    <div class="d-md-flex justify-content-md-end" style="padding-bottom: 15px">
-                        <div class="" style="padding-right: 10px">
-                            <select name="status" class="form-control form-control-sm" id="">
-                                <option value="" selected>Pilih Status</option>
-                                @foreach (HistoryTransactionStatus::labels() as $key => $item)
-                                    <option value="{{ $key }}" {{ Request::get('status') == $key ? 'selected' : '' }}>{{ $item }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="" style="padding-right: 10px">
-                            <input type="date" name="date" value="{{ Request::get('date') }}" class="form-control form-control-sm">
-                        </div>
-                        <div class="" style="padding-right: 10px">
-                            <input type="text" name="q"  placeholder="cari nama akun" value="{{ Request::get('q') }}" class="form-control form-control-sm">
-                        </div>
-                        <div class="" style="padding-right: 10px">
-                            <button type="submit" class="btn btn-xs btn-outline-dark">Cari</button>
-                        </div>
-                        <div class="" >
-                            <button type="button"class="btn btn-xs btn-outline-danger btn-reset" onclick="this.form.reset();">Reset Filter</button>
-                        </div>
-                    </div>
-                </form>
+                <div class="card-header">
+                    <h5 class="card-title">Pembayaran Tagihan</h5>
+                </div>
                 <div class="single-table">
                     <div class="table-responsive">
                         <table class="table text-center">
                             <thead class="text-uppercase bg-dark">
                                 <tr class="text-white">
-                                    <th witdh="10px" style="width: 20px !important">Aksi</th>
-                                    <th>Total Simpanan</th>
-                                    <th>Tanggal Transaksi</th>
+                                    <th>Aksi</th>
+                                    <th>Pembayaran Tagihan</th>
+                                    <th>Total Dibayarkan</th>
+                                    <th>Tanggal Dibayar</th>
                                     <th>Status</th>
-                                    <th>Di Konfirmasi Oleh</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($historySaving as $item)
-                                <tr>
-                                    <td>
-                                        <div class="btn-group" role="group" aria-label="Basic example">
-                                            @if (in_array($item->status, [1,3]))
-                                            <a href="{{ route('admin.saving.all-data.submit', [$saving->user_id, $saving->type, $item->id, 2]) }}" title="Approve">
-                                                <button type="button" class="btn btn-sm btn-outline-info"><i class="fa fa-check"></i></button>
-                                            </a>
-                                            @endif
-                                            @if (!in_array($item->status, [3]))
-                                                <a href="{{ route('admin.saving.all-data.submit', [$saving->user_id, $saving->type, $item->id, 3]) }}" title="Batalkan" style="padding-left: 5px">
-                                                    <button type="button" class="btn btn-sm btn-outline-info"><i class="fa fa-close"></i></button>
+                                @forelse ($listLoanTransaction ?? [] as $item)
+                                    <tr>
+                                        <td>
+                                            <div class="btn-group" role="group" aria-label="Basic example">
+                                                @if (in_array($item->status, [1,3]))
+                                                <a href="{{ route('admin.loan.all-data.submit', [
+                                                    $loan->user_id, 
+                                                    $loan->type, 
+                                                    $item->id, 
+                                                    2]) 
+                                                }}" title="Approve">
+                                                    <button type="button" class="btn btn-sm btn-outline-info"><i class="fa fa-check"></i></button>
                                                 </a>
-                                            @endif
-                                        </div>
-                                    </td>
-                                    <td>Rp {{ number_format($item->total,0,',','.') }}</td>
-                                    <td>{{ $item->date_transaction }}</td>
-                                    <td>{!! HistoryTransactionStatus::labelHtml($item->status) !!}</td>
-                                    <td>{{ optional($item->confirmBy)->name ?? '-' }}</td>
-                                </tr>
+                                                @endif
+                                                @if (!in_array($item->status, [3]))
+                                                    <a href="{{ route('admin.loan.all-data.submit', [
+                                                        $loan->user_id, 
+                                                        $loan->type, 
+                                                        $item->id, 
+                                                        3]) 
+                                                }}" title="Batalkan" style="padding-left: 5px">
+                                                        <button type="button" class="btn btn-sm btn-outline-info"><i class="fa fa-close"></i></button>
+                                                    </a>
+                                                @endif
+                                            </div>
+                                        </td>
+                                        <td>{{ $item->loanListFinancing->due_date }}</td>
+                                        <td>Rp {{ number_format($item->total,0,',','.') }}</td>
+                                        <td>{{ $item->created_at }}</td>
+                                        <td>{!! LoanTransactionStatus::labelHtml($item->status) !!}</td>
+                                    </tr>
                                 @empty
-                                <tr>
-                                    <td class="text-center" colspan="5">Tidak Ada Data Ditampilkan</td>
-                                </tr>
+                                    <tr>
+                                        <td class="text-center" colspan="4">Tidak ada Data Ditemukan.</td>
+                                    </tr>
                                 @endforelse
                             </tbody>
                         </table>
                     </div>
                     <div class="custom-pagination" style="padding-top: 20px"></div>
-                    {{ $historySaving->withQueryString()->links('layouts.pagination') }}
+                    {{-- {{ $listLoan->withQueryString()->links('layouts.pagination') }} --}}
+                </div>
+                <div class="col-sm-12 col-md-12">
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="card-header">
+                    <h5 class="card-title">List Pembayaran Tagihan</h5>
+                </div>
+                <div class="single-table">
+                    <div class="table-responsive">
+                        <table class="table text-center">
+                            <thead class="text-uppercase bg-dark">
+                                <tr class="text-white">
+                                    <th>Status</th>
+                                    <th>Batas Waktu Pembayaran Tagihan</th>
+                                    <th>Total Tagihan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($listLoan as $item)
+                                    <tr>
+                                        <td>{!! LoanStatus::labelHtml($item->status) !!}</td>
+                                        <td>{{ $item->due_date }}</td>
+                                        <td>Rp {{ number_format($item->total_installment,0,',','.') }}</td>
+                                    </tr>
+                                @empty
+                                <tr>
+                                    <td class="text-center" colspan="5">Tidak Ada Data Ditampilkan</td>
+                                </tr>
+                                @endforelse
+                                <tr>
+                                    <td colspan="2" class="text-center"><b>Total Yang belum dibayar</b></td>
+                                    <td>Rp {{ number_format($loan->total_unpaid,0,',','.') }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="custom-pagination" style="padding-top: 20px"></div>
+                    {{ $listLoan->withQueryString()->links('layouts.pagination') }}
                 </div>
                 <div class="col-sm-12 col-md-12">
                 </div>

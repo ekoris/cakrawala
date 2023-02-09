@@ -33,7 +33,7 @@
                         <table class="table text-center">
                             <thead class="text-uppercase">
                                 <tr>
-                                    <th witdh="10px" style="width: 130px !important">Aksi</th>
+                                    <th witdh="150px" style="width: 130px !important">Aksi</th>
                                     <th>Nama Akun</th>
                                     <th>Tipe Pinjaman</th>
                                     <th>Jumlah Pinjaman</th>
@@ -52,20 +52,22 @@
                                 @forelse ($loans as $item)
                                     <tr>
                                         <td>
-                                            @if (in_array($item->status, [1,4]))
-                                            <a href="" title="Setujui">
-                                                <button type="button" class="btn btn-sm btn-outline-info"><i class="fa fa-check"></i></button>
-                                            </a>
-                                            @endif
-                                            @if (!in_array($item->status, [4]))
-                                                <a href="" title="Batalkan" style="padding-left: 5px">
-                                                    <button type="button" class="btn btn-sm btn-outline-info"><i class="fa fa-close"></i></button>
+                                            <div class="btn-group" role="group" aria-label="Basic example">
+                                                @if (in_array($item->status, [1,4]))
+                                                <a href="{{ route('admin.loan.new.submit', [$item->id, 2]) }}" title="Setujui">
+                                                    <button type="button" class="btn btn-sm btn-outline-info"><i class="fa fa-check"></i></button>
                                                 </a>
-                                            @endif
+                                                @endif
+                                                @if (!in_array($item->status, [4]))
+                                                    <a href="{{ route('admin.loan.new.submit', [$item->id, 3]) }}" title="Batalkan" style="padding-left: 5px">
+                                                        <button type="button" class="btn btn-sm btn-outline-info"><i class="fa fa-close"></i></button>
+                                                    </a>
+                                                @endif
+                                            </div>
                                         </td>
                                         <td>{{ $item->customer->name }}</td>
                                         <td>{!! LoanType::labelHtml($item->type) !!}</td>
-                                        <td>Rp {{ number_format($item->total_loan,0,'.','.') }}</td>
+                                        <td><b>Rp {{ number_format($item->total_loan,0,'.','.') }}</b></td>
                                         <td>{{ $item->tenors.' '.TenorType::label($item->tenor_type) }}</td>
                                         <td>{{ $item->collateral->name }}</td>
                                         <td>{{ $item->account->name }}</td>

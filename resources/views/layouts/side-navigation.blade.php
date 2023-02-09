@@ -1,4 +1,12 @@
 <li class=""><a href="maps.html"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+<li class="{{ Route::is('admin.product.*') ? 'active' : '' }}">
+    <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-cubes"></i><span>Product</span></a>
+    <ul class="collapse">
+        <li class="{{ Route::is('admin.product.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.product.index') }}">Daftar Product</a>
+        </li>
+    </ul>
+</li>
 <li class="{{ Route::is('admin.saving.*') ? 'active' : '' }}">
     <a href="javascript:void(0)" aria-expanded="true"><i class="ti-pie-chart"></i><span>Simpanan</span></a>
     <ul class="collapse">
@@ -11,7 +19,7 @@
     <ul class="collapse">
         <li class="{{ Route::is('admin.loan.all-data.*') ? 'active' : '' }}"><a href="{{ route('admin.loan.all-data.index') }}">Semua Pinjaman</a></li>
         <li class="{{ Route::is('admin.loan.new.*') ? 'active' : '' }}"><a href="{{ route('admin.loan.new.index') }}">Pengajuan Pinjaman Baru</a></li>
-        {{-- <li class="{{ Route::is('admin.loan.transaction-pending.*') ? 'active' : '' }}"><a href="{{ route('admin.loan.transaction-pending.index') }}">Pembayaran Pinjaman</a></li> --}}
+        <li class="{{ Route::is('admin.loan.transaction.*') ? 'active' : '' }}"><a href="{{ route('admin.loan.transaction.index') }}">Pembayaran Pinjaman Baru</a></li>
     </ul>
 </li>
 <li class="{{ Route::is('admin.master-market.*') ? 'active' : '' }}"><a href="{{ route('admin.master-market.index') }}"><i class="fa fa-building"></i> <span>Data Pasar</span></a></li>
