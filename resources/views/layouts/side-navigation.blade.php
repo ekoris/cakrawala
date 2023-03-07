@@ -1,10 +1,20 @@
-<li class=""><a href="maps.html"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
-<li class="{{ Route::is('admin.product.*') ? 'active' : '' }}">
+<li class=""><a href="/home"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+<li class="{{ Route::is('admin.product.*') ||  Route::is('admin.category.*') ? 'active' : '' }}">
     <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-cubes"></i><span>Product</span></a>
     <ul class="collapse">
         <li class="{{ Route::is('admin.product.*') ? 'active' : '' }}">
             <a href="{{ route('admin.product.index') }}">Daftar Product</a>
         </li>
+        <li class="{{ Route::is('admin.category.*') ||  Route::is('admin.category.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.category.index') }}">Kategori Product</a>
+        </li>
+    </ul>
+</li>
+<li class="{{ Route::is('admin.order.*') ? 'active' : '' }}">
+    <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-cart-plus"></i><span>Order Product</span></a>
+    <ul class="collapse">
+        <li class="{{ Route::is('admin.order.all-order.*') ? 'active' : '' }}"><a href="{{ route('admin.order.all-order.index') }}">Semua Orderan</a></li>
+        <li class="{{ Route::is('admin.order.new-order.*') ? 'active' : '' }}"><a href="{{ route('admin.order.new-order.index') }}">Orderan Baru</a></li>
     </ul>
 </li>
 <li class="{{ Route::is('admin.saving.*') ? 'active' : '' }}">

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>srtdash - ICO Dashboard</title>
+    <title>Cakrawala</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/png" href="{{ asset('assets') }}/images/icon/favicon.ico">
     <link rel="stylesheet" href="{{ asset('assets') }}/css/bootstrap.min.css">
@@ -72,24 +72,7 @@
                     <div class="col-md-6 col-sm-4 clearfix">
                         <ul class="notification-area pull-right">
                             <li id="full-view"><i class="ti-fullscreen"></i></li>
-                            <li id="full-view-exit"><i class="ti-zoom-out"></i></li>
-                            <li class="dropdown">
-                                <i class="ti-bell dropdown-toggle" data-toggle="dropdown">
-                                    <span>2</span>
-                                </i>
-                                <div class="dropdown-menu bell-notify-box notify-box">
-                                    <span class="notify-title">You have 3 new notifications <a href="#">view all</a></span>
-                                    <div class="nofity-list">
-                                        <a href="#" class="notify-item">
-                                            <div class="notify-thumb"><i class="ti-key btn-danger"></i></div>
-                                            <div class="notify-text">
-                                                <p>You have Changed Your Password</p>
-                                                <span>Just Now</span>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                            </li>
+                            <li><a href=""><i class="fa fa-key"></i></a></li>
                         </ul>
                     </div>
                 </div>
@@ -121,6 +104,15 @@
     <script src="{{ asset('assets') }}/js/plugins.js"></script>
     <script src="{{ asset('assets') }}/js/scripts.js"></script>
     @stack('scripts')
+    <script>
+        $(document).ready(function () {
+            $('.btn-reset').on('click', function () {
+                $("#form-filter").find('input:text, input:password, input:file, select, textarea').val('');
+                $("#form-filter").find('input:radio, input:checkbox').removeAttr('checked').removeAttr('selected');
+                $("#form-filter").submit();
+            });
+        });
+    </script>
 
     <script src="{{ asset('assets/toast/toastr.min.js') }}"></script>
     <script>

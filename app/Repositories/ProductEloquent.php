@@ -55,11 +55,48 @@ class ProductEloquent {
         return Product::find($id);
     }
 
-    public function update($id, $data)
+    public function update($data, $id)
     {
-        return Product::where('id', $id)->update([
-            'name' => $data['name']
+        $product = Product::find($id);
+
+        Product::where('id', $product->id)->update([
+            'category_id' => $data['category_id'],
+            'name' => $data['name'],
+            'description' => $data['description'],
+            'price' => $data['price'],
         ]);
+
+        if (!empty($data['images_before'])) {
+            $deletePhotoBefore = ProductPhoto::where('product_id', $product->id)
+                ->where('is_thumbnail', 0)
+                ->whereNotIn('attachment', $data['images_before'])
+                ->delete();
+        }else{
+            $deletePhotoBefore = ProductPhoto::where('product_id', $product->id)
+                ->where('is_thumbnail', 0)
+                ->delete();
+        }
+
+        if (isset($data['thumbnail'])) {
+            $fileNameIdentity = time().'_'.$data['thumbnail']->getClientOriginalName();
+            $data['thumbnail']->storeAs('product/', $fileNameIdentity, 'public');
+
+            ProductPhoto::where('product_id', $product->id)->where('is_thumbnail', 1)->update([
+                'attachment' => $fileNameIdentity
+            ]);
+        }
+
+        foreach (($data['file'] ?? []) as $key => $value) {
+            $fileNameIdentity = time().'_'.$value->getClientOriginalName();
+            $value->storeAs('product/', $fileNameIdentity, 'public');
+
+            ProductPhoto::create([
+                'product_id' => $product->id,
+                'attachment' => $fileNameIdentity,
+                'is_thumbnail' => 0
+            ]);
+        }
+
     }
 
     public function delete($id)

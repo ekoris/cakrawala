@@ -24,10 +24,10 @@ class LoanController extends Controller
     public function show(Request $request, $id, $type)
     {
         $loan = $this->loan->detailLoan($id, $type);   
-        if (!$loan) {
-            notice('error', 'Belum Ada Pinjaman Yang tersimpan');
-            return redirect()->route('admin.loan.all-data.index');
-        }
+        // if (!$loan) {
+        //     notice('error', 'Belum Ada Pinjaman Yang tersimpan');
+        //     return redirect()->route('admin.loan.all-data.index');
+        // }
 
         $listLoan = $this->loan->listLoanFinancing($request->all(), $loan->id);
         $listLoanTransaction = $this->loan->listLoanTransaction($request->all(), $loan->id);
@@ -125,5 +125,11 @@ class LoanController extends Controller
         }
 
         return redirect()->route('admin.loan.transaction.index');
+    }
+
+    public function list(Request $request, $userId, $type)
+    {
+        $loans = $this->loan->listLoansHistory($request->all(), $userId, $type);
+        return view('admin.loan.list', compact('loans'));
     }
 }

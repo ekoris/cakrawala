@@ -1,6 +1,7 @@
 @extends('layouts.master')
 
 @php
+    use App\Http\Constants\LoanMainStatus;
     use App\Http\Constants\LoanType;
     use App\Http\Constants\TenorType;
 @endphp
@@ -17,23 +18,21 @@
 <div class="row">
     <div class="col-lg-12 mt-5">
         <div class="card">
-            <div class="card-body">
-                <form action="">
-                    <div class="d-flex justify-content-end" style="padding-bottom: 15px">
-                        <div class="">
-                            <div class="input-group">
-                                <input type="search" class="form-control form-control-sm rounded" placeholder="Cari Nama User" value="{{ Request::get('q') }}" name="q" aria-label="Search" aria-describedby="search-addon" />
-                                <button type="button" class="btn btn-sm btn-outline-dark">Cari</button>
-                              </div>
-                        </div>
+            <form action="">
+                <div class="d-flex justify-content-end" style="padding-bottom: 15px">
+                    <div class="">
+                        <a href="{{ route('admin.loan.all-data.index') }}" class="btn btn-dark">Kembali</a>
                     </div>
-                </form>
+                </div>
+            </form>
+            <div class="card-body">
                 <div class="single-table">
                     <div class="table-responsive">
                         <table class="table text-center">
                             <thead class="text-uppercase">
                                 <tr>
                                     <th witdh="150px" style="width: 130px !important">Aksi</th>
+                                    <th>Status Pinjaman</th>
                                     <th>Nama Akun</th>
                                     <th>Tipe Pinjaman</th>
                                     <th>Jumlah Pinjaman</th>
@@ -53,20 +52,14 @@
                                     <tr>
                                         <td>
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                @if (in_array($item->status, [1,4]))
-                                                <a href="{{ route('admin.loan.new.submit', [$item->id, 2]) }}" title="Setujui">
-                                                    <button type="button" class="btn btn-sm btn-outline-info"><i class="fa fa-check"></i></button>
+                                                <a href="{{ route('admin.loan.all-data.show', [$item->id, 1]) }}" title="Detail">
+                                                    <button type="button" class="btn btn-sm btn-outline-info"><i class="fa fa-eye"></i></button>
                                                 </a>
-                                                @endif
-                                                @if (!in_array($item->status, [4]))
-                                                    <a href="{{ route('admin.loan.new.submit', [$item->id, 3]) }}" title="Batalkan" style="padding-left: 5px">
-                                                        <button type="button" class="btn btn-sm btn-outline-info"><i class="fa fa-close"></i></button>
-                                                    </a>
-                                                @endif
                                             </div>
                                         </td>
+                                        <td>{!! LoanMainStatus::labelHtml($item->status) !!}</td>
                                         <td>{{ $item->customer->name }}</td>
-                                        <td>{!! LoanType::labelHtml($item->type) !!}</td>
+                                        <td><b>{{ LoanType::label($item->type) }}</b></td>
                                         <td><b>Rp {{ number_format($item->total_loan,0,'.','.') }}</b></td>
                                         <td>{{ $item->tenors.' '.TenorType::label($item->tenor_type) }}</td>
                                         <td>{{ $item->collateral->name }}</td>

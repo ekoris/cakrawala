@@ -4,7 +4,7 @@
     <h4 class="page-title pull-left">Admin</h4>
     <ul class="breadcrumbs pull-left">
         <li><a href="">Home</a></li>
-        <li><span>Product</span></li>
+        <li><span>Produk</span></li>
     </ul>
 @endpush
 
@@ -22,12 +22,13 @@
                         </div>
                         <div class="">
                             <div class="input-group">
-                                <input type="search" class="form-control form-control-sm rounded" placeholder="Cari Nama Bank" value="{{ Request::get('q') }}" name="q" aria-label="Search" aria-describedby="search-addon" />
+                                <input type="search" class="form-control form-control-sm rounded" placeholder="Cari Nama Produk" value="{{ Request::get('q') }}" name="q" aria-label="Search" aria-describedby="search-addon" />
                                 <button type="button" class="btn btn-sm btn-outline-dark">Cari</button>
                               </div>
                         </div>
                     </div>
                 </form>
+                <div class="break" style="margin-top: 50px"></div>
                 <div class="row">
                     @forelse ($products as $item)
                         <div class="col-md-2 col-lg-3">

@@ -19,9 +19,9 @@ class LoanEloquent {
     public function fetch($params =[])
     {
         $query = Customer::addSelect('users.*',
-                DB::raw("(SELECT id from loans where user_id = users.id and type = 1 and status = 2) as pinjaman_1"),
-                DB::raw("(SELECT id from loans where user_id = users.id and type = 2 and status = 2) as pinjaman_2"),
-                DB::raw("(SELECT id from loans where user_id = users.id and type = 3 and status = 2) as pinjaman_3"),
+                DB::raw("(SELECT id from loans where user_id = users.id and type = 1 and status in (1,2)) as pinjaman_1"),
+                DB::raw("(SELECT id from loans where user_id = users.id and type = 2 and status in (1,2)) as pinjaman_2"),
+                DB::raw("(SELECT id from loans where user_id = users.id and type = 3 and status in (1,2)) as pinjaman_3"),
         )->latest();
 
         if (isset($params['q'])) {
@@ -177,6 +177,13 @@ class LoanEloquent {
                 'status' => LoanMainStatus::DONE
             ]);
         }
+    }
+
+    public function listLoansHistory($params, $userId, $type)
+    {
+        $query = Loan::where('user_id', $userId)->where('type', $type);
+
+        return $query->paginate(15);
     }
   
 }

@@ -22,9 +22,9 @@ class UserEloquent {
 
     public function store($data)
     {
-        return Employee::create([
-            'name' => $data['name'],
-            'email' => 
-        ]);
+        // return Employee::create([
+        //     'name' => $data['name'],
+        //     'email' => 
+        // ]);
     }
 }

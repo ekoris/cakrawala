@@ -13,6 +13,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/artisan', function () {
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    Artisan::call('config:cache');
+    Artisan::call('view:clear');
+    Artisan::call('storage:link');
+    Artisan::call('passport:install');
+    echo "Artisan Success";
+});
+
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -93,7 +104,28 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/create', 'ProductController@create')->name('create');
             Route::post('/store', 'ProductController@store')->name('store');
             Route::get('/{id}/edit', 'ProductController@edit')->name('edit');
+            Route::post('/{id}/update', 'ProductController@update')->name('update');
             Route::get('/{id}/delete', 'ProductController@delete')->name('delete');
+        });
+        
+        Route::group(['prefix' => 'category','as' => 'category.'], function() {
+            Route::get('/', 'ProductCategoryController@index')->name('index');
+            Route::get('/create', 'ProductCategoryController@create')->name('create');
+            Route::post('/store', 'ProductCategoryController@store')->name('store');
+            Route::get('/{id}/edit', 'ProductCategoryController@edit')->name('edit');
+            Route::post('/{id}/update', 'ProductCategoryController@update')->name('update');
+            Route::get('/{id}/delete', 'ProductCategoryController@delete')->name('delete');
+        });
+
+        Route::group(['prefix' => 'order','as' => 'order.'], function() {
+            Route::group(['prefix' => 'all-order','as' => 'all-order.'], function() {
+                Route::get('/', 'OrderProductController@allOrder')->name('index');
+            });
+            Route::group(['prefix' => 'new-order','as' => 'new-order.'], function() {
+                Route::get('/', 'OrderProductController@newOrder')->name('index');
+            });
+
+            Route::get('/action', 'OrderProductController@action')->name('action');
         });
 
         Route::group(['prefix' => 'loan','as' => 'loan.'], function() {
@@ -114,6 +146,9 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::get('/new', 'LoanController@newLoan')->name('index');
                 Route::get('/{id}/submit/{status}', 'LoanController@submit')->name('submit');
             });
+
+            Route::get('{user_id}/list/{type}', 'LoanController@list')->name('list');
+
         });
     });
 });

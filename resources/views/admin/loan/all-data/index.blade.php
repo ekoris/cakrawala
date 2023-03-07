@@ -8,8 +8,8 @@
 @push('breadcumb')
     <h4 class="page-title pull-left">Admin</h4>
     <ul class="breadcrumbs pull-left">
-        <li><a href="index.html">Home</a></li>
-        <li><span>Bank</span></li>
+        <li><a href="">Home</a></li>
+        <li><span>Pinjaman</span></li>
     </ul>
 @endpush
 
@@ -46,9 +46,9 @@
                                         <td>
                                             <select name="" id="" class="form-control form-control-sm form-control-block" onchange="location = this.value;">
                                                 <option value="" selected disabled>Pilih Detail</option>
-                                                <option value="{{ route('admin.loan.all-data.show', [$item->id, 1]) }}">Detail {{ LoanType::label(1) }}</option>
-                                                <option value="{{ route('admin.loan.all-data.show', [$item->id, 2]) }}">Detail {{ LoanType::label(2) }}</option>
-                                                <option value="{{ route('admin.loan.all-data.show', [$item->id, 3]) }}">Detail {{ LoanType::label(3) }}</option>
+                                                <option value="{{ route('admin.loan.list', [$item->id, 1]) }}">Detail {{ LoanType::label(1) }}</option>
+                                                <option value="{{ route('admin.loan.list', [$item->id, 2]) }}">Detail {{ LoanType::label(2) }}</option>
+                                                <option value="{{ route('admin.loan.list', [$item->id, 3]) }}">Detail {{ LoanType::label(3) }}</option>
                                             </select>
                                         </td>
                                         <td>{{ $item->name }}</td>

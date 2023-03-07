@@ -2,28 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\ProductEloquent;
+use App\Repositories\CategoryProductEloquent;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
-class ProductController extends Controller
+class ProductCategoryController extends Controller
 {
     protected $repository;
 
-    public function __construct(ProductEloquent $repository)
+    public function __construct(CategoryProductEloquent $repository)
     {
         $this->repository = $repository;
     }
 
     public function index(Request $request)
     {
-        $products = $this->repository->fetch($request->all());
-        return view('admin.product.index', compact('products'));
+        $repositories = $this->repository->fetch($request->all());
+        return view('admin.product.category.index', compact('repositories'));
     }
 
     public function create(Request $request)
     {
-        return view('admin.product.create');
+        return view('admin.product.category.create');
     }
 
     public function store(Request $request)
@@ -34,13 +33,13 @@ class ProductController extends Controller
             throw $th;
         }
 
-        return redirect()->route('admin.product.index');
+        return redirect()->route('admin.category.index');
     }
 
     public function edit(Request $request, $id)
     {
-        $product = $this->repository->find($id);
-        return view('admin.product.edit', compact('product'));
+        $repository = $this->repository->find($id);
+        return view('admin.product.category.edit', compact('repository'));
     }
 
     public function update(Request $request, $id)
@@ -50,7 +49,7 @@ class ProductController extends Controller
         } catch (\Throwable $th) {
             throw $th;
         }
-        return redirect()->route('admin.product.index');
+        return redirect()->route('admin.category.index');
     }
 
     public function delete($id)
@@ -60,7 +59,7 @@ class ProductController extends Controller
         } catch (\Throwable $th) {
             throw $th;
         }
-        return redirect()->route('admin.product.index');
+        return redirect()->route('admin.category.index');
     }
 
 }

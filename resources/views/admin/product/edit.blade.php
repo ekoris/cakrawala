@@ -1,11 +1,11 @@
 @extends('layouts.master')
 
 @push('breadcumb')
-<h4 class="page-title pull-left">Admin</h4>
-<ul class="breadcrumbs pull-left">
-    <li><a href="">Home</a></li>
-    <li><span>Produk</span></li>
-</ul>
+	<h4 class="page-title pull-left">Admin</h4>
+	<ul class="breadcrumbs pull-left">
+		<li><a href="">Home</a></li>
+		<li><span>Produk</span></li>
+	</ul>
 @endpush
 
 @section('content')
@@ -13,27 +13,27 @@
     <div class="col-lg-8 mt-5">
         <div class="card">
             <div class="card-body">
-                <form role="form" method="POST" action="{{ route('admin.product.store') }}" enctype="multipart/form-data">
+                <form role="form" method="POST" action="{{ route('admin.product.update', $product->id) }}" enctype="multipart/form-data">
                     @csrf
                     <div class="box-body">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Title</label>
-                            <input type="text" name="name" required class="form-control" placeholder="Enter Name" required>
+                            <input type="text" name="name" required class="form-control" placeholder="Enter Name" value="{{ $product->name }}" required>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Category</label>
                             <select name="category_id" class="form-control" id="" required>
                                 @foreach (resolve(App\Models\Category::class)->get() as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    <option value="{{ $item->id }}" {{ $product->category_id == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Image Thumbnail</label>
                             <div class="input-group input-group-outline mb-3">
-                                <input type='file' required name="image" onchange="readURL(this);"/>
+                                <input type='file' name="thumbnail" onchange="readURL(this);"/>
                                 <br>
-                                <img id="blah" style="height: 200px;" src="{{ asset('assets/images/blog/post-thumb1.jpg') }}" alt="your image" />
+                                <img id="blah" style="height: 200px;" src="{{ $product->url_image_thumbnail ?? asset('assets/images/blog/post-thumb1.jpg') }}" alt="your image" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -48,6 +48,17 @@
                                     <div class="upload__img-box">
                                         <div style="width:100%;">
                                             <div class="row img-preview">
+												@forelse ($product->productPhotos as $key => $item)
+													<div class='col-md-2'>
+														<input type="hidden" name="images_before[]" value="{{ $item->attachment }}">
+														<img width="100%" src="{{ $item->url_photo }}" data-number="{{ $key }}" data-file="{{ $key }}"/>
+														<div class="upload__img-close" style="margin-top:30px">
+															<a href="#" class="btn btn-danger btn-sm btn-block">Remove</a>
+														</div>
+													</div>
+												@empty
+													<div></div>
+												@endforelse
                                             </div>
                                         </div>
                                     </div>
@@ -56,11 +67,11 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Deskripsi</label>
-                            <textarea name="description" class="form-control" id="" cols="30" rows="10"></textarea>
+                            <textarea name="description" class="form-control" id="" cols="30" rows="10">{{ $product->description }}</textarea>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Harga</label>
-                            <input type="number" required class="form-control" name="price" value="" placeholder="Price">
+                            <input type="number" required class="form-control" name="price" value="{{ $product->price }}" placeholder="Price">
                         </div>
                     </div>
                     <div class="box-footer" style="text-align: right">
@@ -170,30 +181,6 @@
 <script>
 	jQuery(document).ready(function () {
 		ImgUpload();
-	});
-
-	$(document).on('click', '.upload-edition .repeat-add', function(e){
-		e.preventDefault();
-		let template = `
-		<div class="d-flex pb-8 repeat-row">
-			<div class="form-file__input w-100">
-				<div class="row">
-					<div class="col-md-4">
-						<div class="form-group">
-							<input type="text" class="form-control" name="product_edition[]" placeholder="Add Edition">
-						</div>
-					</div>
-					<div class="col-md-2">
-						<a href="" class="repeat-add ml-8 my-auto">
-							<button class="btn btn-warning btn-sm">Add Edition</button>
-						</a>
-					</div>
-				</div>
-			</div>
-		</div>`;
-		
-		$(this).closest('.repeat-container').append(template);
-		$(this).html('<button class="btn btn-danger btn-sm">remove</button><br>').attr('class', 'repeat-remove ml-8 my-auto')
 	});
 
 	$(document).on('click', '.repeat-remove', function(e){

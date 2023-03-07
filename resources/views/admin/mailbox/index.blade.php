@@ -3,8 +3,8 @@
 @push('breadcumb')
     <h4 class="page-title pull-left">Admin</h4>
     <ul class="breadcrumbs pull-left">
-        <li><a href="index.html">Home</a></li>
-        <li><span>Bank</span></li>
+        <li><a href="">Home</a></li>
+        <li><span>Mailbox</span></li>
     </ul>
 @endpush
 

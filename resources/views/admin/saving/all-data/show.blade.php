@@ -9,7 +9,7 @@ use App\Http\Constants\HistoryTransactionStatus;
 <h4 class="page-title pull-left">Admin</h4>
 <ul class="breadcrumbs pull-left">
     <li><a href="">Home</a></li>
-    <li><span>Data Pinjaman</span></li>
+    <li><span>Simpanan</span></li>
 </ul>
 @endpush
 

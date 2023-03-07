@@ -11,7 +11,7 @@ class Product extends Model
     
     public function productPhotos()
     {
-        return $this->hasMany(ProductPhoto::class);
+        return $this->hasMany(ProductPhoto::class)->where('is_thumbnail', 0);
     }
 
     public function productCategory()
