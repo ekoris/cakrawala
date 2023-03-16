@@ -53,7 +53,12 @@ class AuthController extends Controller
                 return response()->json(['error' => 'Unauthorised, User Not Active'], 401);
             }
             $token = auth()->user()->createToken('cakrawala')->accessToken;
-            return response()->json(['token' => $token], 200);
+            return response()->json([
+                'token' => $token,
+                'info' => array_merge(logged_in_user()->toArray(),[
+                    'total_saving' => logged_in_user()->total_saving
+                ])
+            ], 200);
         } else {
             return response()->json(['error' => 'Unauthorised'], 401);
         }
@@ -76,7 +81,12 @@ class AuthController extends Controller
                 ]);
 
                 $token = auth()->user()->createToken('cakrawala')->accessToken;
-                return response()->json(['token' => $token], 200);
+                return response()->json([
+                    'token' => $token,
+                    'info' => array_merge(logged_in_user()->toArray(),[
+                        'total_saving' => logged_in_user()->total_saving
+                    ])
+                ], 200);
             }elseif (logged_in_user()->is_employee != 0) {
                 return response()->json(['message' => 'Kamu bukan Pengguna, Silahkan Login Menggunakan Akun pengguna'], 401);
             }elseif($dateNow > $date && logged_in_user()->otp_code == $request->otp ){

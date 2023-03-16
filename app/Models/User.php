@@ -39,6 +39,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getTotalSavingAttribute()
+    {
+        return SavingDeposit::where('user_id', logged_in_user()->id)->sum('total_balance');
+    }
+
     public function posts()
     {
         return $this->hasMany(Post::class);

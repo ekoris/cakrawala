@@ -19,7 +19,9 @@ class UserController extends BaseController
    
    public function info(Request $request)
    {
-      return $this->sendResponse(logged_in_user(), 'Informasi User Login');
+      return $this->sendResponse(array_merge(logged_in_user()->toArray(),[
+         'total_saving' => logged_in_user()->total_saving
+      ]), 'Informasi User Login');
    }
 
    public function update(UserRequest $request)
