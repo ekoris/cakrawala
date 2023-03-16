@@ -17,24 +17,29 @@ class AccountEloquent {
     public function accountType($type)
     {
         $account = Account::where('type_account', $type)->where('user_id', logged_in_user()->id)->first();
-        return [
-            'user_id' => $account->user_id,
-            'name' => $account->name,
-            'date_of_birth' => $account->date_of_birth,
-            'place_of_birth' => $account->place_of_birth,
-            'nik' => $account->nik,
-            'address' => $account->address,
-            'account_officer' => $account->account_officer,
-            'market_id' => $account->market_id,
-            'market_name' => optional($account->market)->name,
-            'identity_attachment_url' => $account->url_identity_attachment,
-            'self_photo_url' => $account->url_self_photo,
-            'signature_photo_url' => $account->url_signature_photo,
-            'status' => $account->status,
-            'status_label' => StatusAccount::label($account->status),
-            'type_account' => $account->type_account,
-            'type_account_label' => TypeAccount::label($account->type_account)
-        ];
+        
+        if ($account) {
+            return [
+                'user_id' => $account->user_id,
+                'name' => $account->name,
+                'date_of_birth' => $account->date_of_birth,
+                'place_of_birth' => $account->place_of_birth,
+                'nik' => $account->nik,
+                'address' => $account->address,
+                'account_officer' => $account->account_officer,
+                'market_id' => $account->market_id,
+                'market_name' => optional($account->market)->name,
+                'identity_attachment_url' => $account->url_identity_attachment,
+                'self_photo_url' => $account->url_self_photo,
+                'signature_photo_url' => $account->url_signature_photo,
+                'status' => $account->status,
+                'status_label' => StatusAccount::label($account->status),
+                'type_account' => $account->type_account,
+                'type_account_label' => TypeAccount::label($account->type_account)
+            ];
+        }
+
+        return null;
     }
 
     public function saveAccount($data)

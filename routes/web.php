@@ -131,7 +131,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::group(['prefix' => 'loan','as' => 'loan.'], function() {
             Route::group(['as' => 'all-data.'], function() {
                 Route::get('/all-data', 'LoanController@allData')->name('index');
-                Route::get('{id}/show/{type}', 'LoanController@show')->name('show');
+                Route::get('{id}/show', 'LoanController@show')->name('show');
                 Route::get('{id}/show/{type}/submit-transaction/{transaksi_id}/{status}', 'LoanController@submitTransaction')->name('submit');
             });
 

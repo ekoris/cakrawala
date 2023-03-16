@@ -52,7 +52,7 @@
                                     <tr>
                                         <td>
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                <a href="{{ route('admin.loan.all-data.show', [$item->id, 1]) }}" title="Detail">
+                                                <a href="{{ route('admin.loan.all-data.show', $item->id) }}" title="Detail">
                                                     <button type="button" class="btn btn-sm btn-outline-info"><i class="fa fa-eye"></i></button>
                                                 </a>
                                             </div>

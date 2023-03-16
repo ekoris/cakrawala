@@ -6,7 +6,9 @@ use App\Http\Constants\HistoryTransactionStatus;
 use App\Http\Constants\LoanMainStatus;
 use App\Http\Constants\LoanStatus;
 use App\Http\Constants\LoanTransactionStatus;
+use App\Http\Constants\TypeHistoryTransaction;
 use App\Models\Customer;
+use App\Models\HistoryTransaction;
 use App\Models\Loan;
 use App\Models\LoanListFinancing;
 use App\Models\LoanListTransaction;
@@ -59,7 +61,7 @@ class LoanEloquent {
         ]);
     }
 
-    public function detailLoan($id, $type)
+    public function detailLoan($id)
     {
         return Loan::addSelect(
 
@@ -68,8 +70,7 @@ class LoanEloquent {
                     ( select sum(total_installment) from loan_list_financings where loan_id = loans.id and status = 2 ) as total_paid ')
             )
             ->with('account')
-            ->where('user_id', $id)
-            ->where('type', $type)
+            ->where('id', $id)
             ->first();
     }
 
@@ -101,6 +102,16 @@ class LoanEloquent {
             LoanListFinancing::where('id', $loanListTransaction->loan_list_financing_id)->update([
                 'status' => LoanStatus::PAID
             ]);
+
+            HistoryTransaction::create([
+                'transaction_id' => $loanListTransaction->id,
+                'transaction_table' => 'loan_list_transactions',
+                'user_id' => $loanListTransaction->user_id,
+                'total' => $loanListTransaction->total,
+                'type_transaction' => $loanListTransaction->loanListFinancing->loan->type,
+                'type' => TypeHistoryTransaction::OUT
+            ]);
+    
         }else{
             LoanListTransaction::where('id', $loanListTransaction->id)->update([
                 'status' => 3,

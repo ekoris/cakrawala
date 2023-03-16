@@ -25,10 +25,10 @@ class SavingController extends BaseController
             return $this->sendError('data error');
         }
    }
-
+   
    public function listSaving(Request $request)
    {
-        try {
+       try {
             $saving = $this->saving->listSaving();
             return $this->sendResponse($saving, 'Data');
         } catch (\Throwable $th) {

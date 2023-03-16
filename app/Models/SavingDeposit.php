@@ -21,7 +21,7 @@ class SavingDeposit extends Model
 
     public function savingDepositTransactions()
     {
-        return $this->hasMany(SavingDepositTransaction::class,'saving_id');
+        return $this->hasMany(SavingDepositTransaction::class,'saving_deposit_id');
     }
 
     public function user()

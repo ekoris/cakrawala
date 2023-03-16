@@ -45,6 +45,8 @@ Route::group(['middleware' => 'auth:api'], function () {
 		Route::get('/product', 'ProductController@product')->name('product');
 		Route::get('/product/{id_product}/detail', 'ProductController@detailProduct')->name('detail');
 		Route::get('/category-product', 'ProductController@categoryProduct')->name('category-product');
+
+		Route::get('/history-transaction', 'HistoryTransactionController@index')->name('history-transaction');
 		
 		Route::group(['prefix' => 'order'], function() {
 			Route::post('/', 'OrderController@order')->name('order');

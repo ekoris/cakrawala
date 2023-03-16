@@ -58,13 +58,13 @@ class SavingEloquent {
         $savingDeposit = SavingDeposit::where('user_id', logged_in_user()->id)->get();
 
         $data = [];
-        foreach ($savingDeposit as $key => $value) {
-            $account = $value->account;
+        foreach ($savingDeposit as $key => $row) {
+            $account = $row->account;
             $data[] = [
-                    'user_id' => $value->user_id,
-                    'user_name' => $value->account->user->name,
+                    'user_id' => $row->user_id,
+                    'user_name' => $row->account->user->name,
                     'account' => [
-                        'id' => $value->account->id,
+                        'id' => $row->account->id,
                         'name' => $account->name,
                         'date_of_birth' => $account->date_of_birth,
                         'place_of_birth' => $account->place_of_birth,
@@ -81,12 +81,12 @@ class SavingEloquent {
                         'type_account' => $account->type_account,
                         'type_account_label' => TypeAccount::label($account->type_account)
                     ],
-                    'type_saving' => $value->type,
-                    'type_saving_label' => SavingType::label($value->type),
-                    'total_balance' => $value->total_balance,
-                    'last_update' => $value->last_update_at,
-                    'last_update_by' => optional($value->lastUpdataUser)->name,
-                    'history_transaction' => $value->savingDepositTransactions
+                    'type_saving' => $row->type,
+                    'type_saving_label' => SavingType::label($row->type),
+                    'total_balance' => $row->total_balance,
+                    'last_update' => $row->last_update_at,
+                    'last_update_by' => optional($row->lastUpdataUser)->name,
+                    'history_transaction' => $row->savingDepositTransactions
                 ];
         }
 

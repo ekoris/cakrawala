@@ -23,6 +23,10 @@ class SavingController extends Controller
     public function show(Request $request, $id, $type)
     {
         $saving = $this->saving->detailSaving($id, $type);   
+        if (!$saving) {
+            notice('error', "Tidak ada Data Tersimpan");
+            return redirect()->route('admin.saving.all-data.index');
+        }
         $historySaving = $this->saving->historySaving($request->all(), $id, $type);   
         return view('admin.saving.all-data.show', compact('saving','historySaving'));
     }

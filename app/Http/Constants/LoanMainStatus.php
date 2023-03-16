@@ -38,7 +38,7 @@ class LoanMainStatus
                 return '<span class="badge badge-danger">'.static::labels()[$id].'</span>';
                 break;
             case '4':
-                return '<span class="badge badge-danger">'.static::labels()[$id].'</span>';
+                return '<span class="badge badge-dark">'.static::labels()[$id].'</span>';
                 break;
             
             default:

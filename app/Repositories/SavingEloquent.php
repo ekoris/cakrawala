@@ -3,7 +3,9 @@
 namespace App\Repositories;
 
 use App\Http\Constants\HistoryTransactionStatus;
+use App\Http\Constants\TypeHistoryTransaction;
 use App\Models\Customer;
+use App\Models\HistoryTransaction;
 use App\Models\SavingDeposit;
 use App\Models\SavingDepositTransaction;
 use Illuminate\Support\Facades\DB;
@@ -70,6 +72,17 @@ class SavingEloquent {
             'last_updated_at' => date('Y-m-d H:i:s'),
             'last_update_by' => logged_in_user()->id
         ]);
+
+        if ($status == 2) {
+            HistoryTransaction::create([
+                'transaction_id' => $savingDepositTransaction->id,
+                'transaction_table' => 'saving_deposit_transactions',
+                'user_id' => $savingDeposit->user->id,
+                'total' => $savingDepositTransaction->total,
+                'type_transaction' => $savingDeposit->type,
+                'type' => TypeHistoryTransaction::IN
+            ]);
+        }
     }
 
     public function transactionPending($params = [])

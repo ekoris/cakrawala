@@ -85,12 +85,15 @@ class LoanEloquent {
         return $dates;
     }
 
-    public function listLoan($data = [])
+    public function listLoan($params = [])
     {
-        $loans = Loan::whereHas('account', function($q){
-            $q->where('user_id', logged_in_user()->id)->where('type_account', TypeAccount::LOAN);
-        })->get();
+        $loans = Loan::where('user_id', logged_in_user()->id);
 
+        if (isset($params['status'])) {
+            $loans->where('status', $params['status']);
+        }
+
+        $loans = $loans->get();
         $data = [];
         foreach ($loans as $key => $value) {
             $data[] = [

@@ -40,7 +40,7 @@ class LoanController extends BaseController
    public function listLoan(Request $request)
    {
         try {
-            $loan = $this->loan->listLoan();
+            $loan = $this->loan->listLoan($request->all());
             return $this->sendResponse($loan, 'Data');
         } catch (\Throwable $th) {
             throw $th;

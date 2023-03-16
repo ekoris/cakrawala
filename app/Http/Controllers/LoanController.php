@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Constants\LoanStatus;
+use App\Http\Constants\LoanMainStatus;
 use App\Repositories\LoanEloquent;
 use Illuminate\Http\Request;
 
@@ -21,14 +22,9 @@ class LoanController extends Controller
         return view('admin.loan.all-data.index', compact('loans'));
     }
 
-    public function show(Request $request, $id, $type)
+    public function show(Request $request, $id)
     {
-        $loan = $this->loan->detailLoan($id, $type);   
-        // if (!$loan) {
-        //     notice('error', 'Belum Ada Pinjaman Yang tersimpan');
-        //     return redirect()->route('admin.loan.all-data.index');
-        // }
-
+        $loan = $this->loan->detailLoan($id);
         $listLoan = $this->loan->listLoanFinancing($request->all(), $loan->id);
         $listLoanTransaction = $this->loan->listLoanTransaction($request->all(), $loan->id);
         return view('admin.loan.all-data.show', compact('loan','listLoan','listLoanTransaction'));
@@ -65,7 +61,7 @@ class LoanController extends Controller
         $findLoanExist = $this->loan->findLoanExist($findLoan->user_id, $findLoan->type);
 
         if ($findLoanExist->count() > 0) {
-            $this->loan->submit($id, 3);
+            $this->loan->submit($id, LoanMainStatus::CANCELED);
             notice('error', 'Sudah ada Pinjaman Yang sedang berjalan, Harus menyelesaikan Simpanan yang sedang berjalan dahulu, pengajuan akan otomatis dibatalkan');
             return redirect()->route('admin.loan.new.index');
         }
