@@ -30,6 +30,7 @@ class AuthController extends Controller
                 'phone' => $request->phone,
                 'address' => $request->address,
                 'is_employee' => 0,
+                'is_active' => 1,
             ]);
             return response()->json(['message' => 'Register Success, Cek OTP'], 200);
         } catch (\Throwable $th) {
@@ -49,9 +50,6 @@ class AuthController extends Controller
         ];
  
         if (auth()->attempt($data)) {
-            if (logged_in_user()->is_active == null) {
-                return response()->json(['error' => 'Unauthorised, User Not Active'], 401);
-            }
             $token = auth()->user()->createToken('cakrawala')->accessToken;
             return response()->json([
                 'token' => $token,
