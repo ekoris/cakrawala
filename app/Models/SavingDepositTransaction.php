@@ -7,6 +7,13 @@ use Illuminate\Support\Facades\Storage;
 
 class SavingDepositTransaction extends Model
 {
+    protected $casts = [
+        'saving_deposit_id' => 'integer',
+        'total' => 'integer',
+        'status' => 'integer',
+        'confirm_by' => 'integer',
+    ];
+
     protected $guarded = [];  
 
     public function savingDeposit()

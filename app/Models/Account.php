@@ -7,6 +7,13 @@ use Illuminate\Support\Facades\Storage;
 
 class Account extends Model
 {
+
+    protected $casts = [
+        'user_id' => 'integer',
+        'nik' => 'integer',
+        'market_id' => 'integer',
+        'status' => 'integer',
+    ];
     
     protected $guarded = [];  
 

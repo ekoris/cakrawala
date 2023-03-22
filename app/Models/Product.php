@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
+    protected $casts = [
+        'category_id' => 'integer',
+        'price' => 'integer',
+    ];
+
     protected $guarded = [];  
     
     public function productPhotos()

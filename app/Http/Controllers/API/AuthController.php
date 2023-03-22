@@ -32,7 +32,22 @@ class AuthController extends Controller
                 'is_employee' => 0,
                 'is_active' => 1,
             ]);
-            return response()->json(['message' => 'Register Success, Cek OTP'], 200);
+
+            $data = [
+                'name' => $request->name,
+                'password' => $request->password
+            ];
+
+            auth()->attempt($data);
+             
+            $token = auth()->user()->createToken('cakrawala')->accessToken;
+            return response()->json([
+                'token' => $token,
+                'info' => array_merge(logged_in_user()->toArray(),[
+                    'total_saving' => logged_in_user()->total_saving
+                ])
+            ], 200);
+
         } catch (\Throwable $th) {
             throw $th;
         }

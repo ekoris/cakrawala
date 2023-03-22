@@ -7,6 +7,15 @@ use Illuminate\Support\Facades\Storage;
 
 class LoanListTransaction extends Model
 {    
+
+    protected $casts = [
+        'loan_list_financing_id' => 'integer',
+        'user_id' => 'integer',
+        'total' => 'integer',
+        'approver_id' => 'integer',
+        'status' => 'integer',
+    ];
+
     protected $guarded = [];  
     
     public function loanListFinancing()

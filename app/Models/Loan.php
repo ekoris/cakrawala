@@ -7,6 +7,18 @@ use Illuminate\Support\Facades\Storage;
 
 class Loan extends Model
 {
+
+    protected $casts = [
+        'account_id' => 'integer',
+        'type' => 'integer',
+        'total_loan' => 'integer',
+        'tenors' => 'integer',
+        'tenor_type' => 'integer',
+        'collateral_id' => 'integer',
+        'user_id' => 'integer',
+        'status' => 'integer',
+    ];
+
     protected $guarded = [];  
 
     public function account()
