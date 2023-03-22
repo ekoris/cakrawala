@@ -28,6 +28,6 @@ class RegisterRequest extends FormRequest
             'success'   => 401,
             'message'   => 'Validation errors',
             'data'      => $validator->errors()
-        ]));
+        ],401));
     }
 }

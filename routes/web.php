@@ -18,7 +18,6 @@ Route::get('/artisan', function () {
     Artisan::call('config:clear');
     Artisan::call('config:cache');
     Artisan::call('view:clear');
-    Artisan::call('storage:link');
     Artisan::call('passport:install');
     echo "Artisan Success";
 });
