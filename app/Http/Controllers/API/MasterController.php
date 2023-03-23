@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Resources\AccountOfficerCollection;
 use App\Http\Resources\BankCollection;
 use App\Http\Resources\BannerPromoCollection;
 use App\Http\Resources\CollateralCollection;
@@ -42,5 +43,10 @@ class MasterController extends BaseController
    {
       $message = $this->master->storeMailBox($request->all());
       return $this->sendResponse($message, 'message send Success');
+   }
+
+   public function accountOfficer(Request $request)
+   {
+      return AccountOfficerCollection::collection($this->master->accountOfficer($request->all()));
    }
 }

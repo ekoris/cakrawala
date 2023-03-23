@@ -7,6 +7,7 @@ use App\Models\BannerPromo;
 use App\Models\Collateral;
 use App\Models\MailBox;
 use App\Models\Market;
+use App\Models\User;
 
 class MasterEloquent {
 
@@ -46,5 +47,16 @@ class MasterEloquent {
             'email' => $data['email'] ?? null,
             'value' => $data['value'] ?? null,
         ]);
+    }
+
+    public function accountOfficer($params = [])
+    {
+        $query =  User::where('is_employee', 1)->latest();
+
+        if (isset($params['q'])) {
+            $query->where('name','like','%'.$params['q'].'%');
+        }
+
+        return $query->paginate(15);
     }
 }

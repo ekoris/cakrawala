@@ -33,6 +33,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 		Route::group(['prefix' => 'master'], function() {
 			Route::get('/market', 'MasterController@market')->name('market');
+			Route::get('/account-officer', 'MasterController@accountOfficer')->name('account-officer');
 			Route::get('/bank', 'MasterController@bank')->name('bank');
 			Route::get('/collateral', 'MasterController@collateral')->name('collateral');
 			Route::get('/banner-promo', 'MasterController@bannerPromo')->name('banner-promo');
