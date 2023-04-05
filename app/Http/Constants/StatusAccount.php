@@ -15,8 +15,11 @@ class StatusAccount
         ];
     }
 
-    public static function label(int $id)
+    public static function label($id = '')
     {   
+        if ($id == '') {
+            return null;
+        }
         return static::labels()[$id];
     }
 

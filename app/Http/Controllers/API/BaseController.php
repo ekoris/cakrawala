@@ -11,7 +11,7 @@ class BaseController extends Controller
     {
     	$response = [
             'success' => true,
-            'data'    => $result,
+            'data'    => !empty($result) ? $result : null,
             'message' => $message,
         ];
 
