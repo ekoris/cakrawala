@@ -26,7 +26,7 @@ class SavingEloquent {
 
         $dataTransaction = [
             'saving_deposit_id' => $savingDeposit->id,
-            'total' => $data['total'],
+            'total' => (int)$data['total'],
             'date_transaction' => date('Y-m-d H:i:s'),
             'status' => SavingTransactionStatus::PENDING,
         ];

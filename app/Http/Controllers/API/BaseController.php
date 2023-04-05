@@ -15,7 +15,7 @@ class BaseController extends Controller
             'message' => $message,
         ];
 
-        return response()->json($response, 200);
+        return response()->json($response, 200)->setEncodingOptions(JSON_NUMERIC_CHECK);
     }
     
     public function sendError($error, $errorMessages = [], $code = 404)
