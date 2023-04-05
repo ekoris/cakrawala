@@ -11,7 +11,7 @@ class BaseController extends Controller
     {
     	$response = [
             'success' => true,
-            'data'    => is_null($result) ? null : $result,
+            'data'    => is_array($result) ? (count($result) > 0 ? $result : null) : $result,
             'message' => $message,
         ];
 

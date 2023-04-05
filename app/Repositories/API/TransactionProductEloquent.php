@@ -38,7 +38,8 @@ class TransactionProductEloquent {
             'qty' => $data['qty'],
             'total_order' => $data['qty'] * $product->price,
             'payment_type' => $data['payment_type'],
-            'status' => 1
+            'status' => 1,
+            'account_bank_id' => $data['account_bank_id']
         ];
 
         $order = OrderProduct::create($dataOrder);
@@ -47,6 +48,9 @@ class TransactionProductEloquent {
             'payment_label' => PaymentType::label($data['payment_type']),
             'status_label' => StatusOrder::label(1),
             'order_id' => $order->id,
+            'order_date' => date('Y-m-d H:i:s', strtotime($order->created_at)),
+            'account_bank_id' => optional($order->accountBank)->id, 
+            'account_bank_name' => optional($order->accountBank)->name, 
         ]);
     }
 
@@ -61,6 +65,9 @@ class TransactionProductEloquent {
             'total_order' => $orderProduct->total_order,
             'payment_label' => PaymentType::label($orderProduct->payment_type),
             'status_label' => StatusOrder::label($orderProduct->status),
+            'order_date' => date('Y-m-d H:i:s', strtotime($orderProduct->created_at)),
+            'account_bank_id' => optional($orderProduct->accountBank)->id, 
+            'account_bank_name' => optional($orderProduct->accountBank)->name,
         ];
     }
 

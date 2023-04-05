@@ -25,6 +25,11 @@ class OrderProduct extends Model
         return $this->belongsTo(Product::class);
     }
 
+    public function accountBank()
+    {
+        return $this->belongsTo(AccountBank::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
