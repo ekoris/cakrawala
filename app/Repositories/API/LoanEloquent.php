@@ -117,25 +117,24 @@ class LoanEloquent {
     {
         $loan = Loan::whereHas('account', function($q) use($type){
             $q->where('user_id', logged_in_user()->id);
-        })->where('type', $type)->get();
+        })->where('type', $type)->first();
 
-        $data = [];
-        foreach ($loan as $key => $value) {
-            $data[] = [
-                    'id' => $value->id,
-                    'account_id' => $value->account_id,
-                    'account_name' => $value->account->name,
-                    'account_user_id' => $value->account->user_id,
-                    'account_user_name' => $value->account->user->name,
-                    'type_loan' => $value->type,
-                    'type_loan_label' => LoanType::label($value->type),
-                    'collateral_id' => $value->collateral->id,
-                    'collateral_label' => $value->collateral->name,
-                    'loan_list_financings' => $value->loanListFinancings
-                ];
+        if ($loan) {
+            return [
+                'id' => $loan->id,
+                'account_id' => $loan->account_id,
+                'account_name' => $loan->account->name,
+                'account_user_id' => $loan->account->user_id,
+                'account_user_name' => $loan->account->user->name,
+                'type_loan' => $loan->type,
+                'type_loan_label' => LoanType::label($loan->type),
+                'collateral_id' => $loan->collateral->id,
+                'collateral_label' => $loan->collateral->name,
+                'loan_list_financings' => $loan->loanListFinancings
+            ];
         }
 
-        return $data;
+        return null;
     }
 
     public function findLoan($loanId)
