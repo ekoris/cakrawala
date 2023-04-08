@@ -27,6 +27,8 @@ class ListOrderCollection extends JsonResource
             'status_label' => StatusOrder::label($this->status),
             'validate_by' => optional($this->validate)->name,
             'finish_order_date' => $this->finish_order_date,
+            'account_bank_id' => optional($this->accountBank)->id, 
+            'account_bank_name' => optional($this->accountBank)->name, 
         ];
     }
 }
