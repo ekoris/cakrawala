@@ -8,6 +8,7 @@ use App\Http\Constants\LoanTransactionStatus;
 use App\Http\Constants\LoanType;
 use App\Http\Constants\SavingType;
 use App\Http\Constants\TypeAccount;
+use App\Models\Account;
 use App\Models\Loan;
 use App\Models\LoanListFinancing;
 use App\Models\LoanListTransaction;
@@ -19,9 +20,12 @@ class LoanEloquent {
 
     public function store($data)
     {
-        $loan = Loan::create(array_merge($data,[
+        $account = Account::where('user_id', logged_in_user()->id)->where('type_account', TypeAccount::LOAN)->first();
+
+        $loan = Loan::create(array_merge($data, [
             'user_id' => logged_in_user()->id,
-            'status' => LoanMainStatus::NEW
+            'status' => LoanMainStatus::NEW,
+            'account_id' => $account->id
         ]));
 
         switch ($data['tenor_type']) {
