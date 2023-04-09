@@ -51,6 +51,7 @@ class TransactionProductEloquent {
             'order_date' => date('Y-m-d H:i:s', strtotime($order->created_at)),
             'account_bank_id' => optional($order->accountBank)->id, 
             'account_bank_name' => optional($order->accountBank)->name, 
+            'account_bank_number' => optional($order->accountBank)->number, 
         ]);
     }
 
@@ -68,6 +69,7 @@ class TransactionProductEloquent {
             'order_date' => date('Y-m-d H:i:s', strtotime($orderProduct->created_at)),
             'account_bank_id' => optional($orderProduct->accountBank)->id, 
             'account_bank_name' => optional($orderProduct->accountBank)->name,
+            'account_bank_number' => optional($orderProduct->accountBank)->number, 
         ];
     }
 
