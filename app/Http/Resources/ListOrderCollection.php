@@ -29,6 +29,7 @@ class ListOrderCollection extends JsonResource
             'finish_order_date' => $this->finish_order_date,
             'account_bank_id' => optional($this->accountBank)->id, 
             'account_bank_name' => optional($this->accountBank)->name, 
+            'order_date' => date('Y-m-d H:i:s', strtotime($this->created_at)), 
         ];
     }
 }
