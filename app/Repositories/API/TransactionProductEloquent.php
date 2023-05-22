@@ -2,10 +2,19 @@
 
 namespace App\Repositories\API;
 
+use App\Http\Constants\LoanMainStatus;
+use App\Http\Constants\LoanStatus;
+use App\Http\Constants\LoanType;
 use App\Http\Constants\PaymentType;
 use App\Http\Constants\StatusOrder;
+use App\Http\Constants\TenorType;
+use App\Http\Constants\TypeAccount;
+use App\Models\Account;
 use App\Models\Category;
+use App\Models\Loan;
+use App\Models\LoanListFinancing;
 use App\Models\OrderProduct;
+use App\Models\OrderProductCredit;
 use App\Models\PaymentOrder;
 use App\Models\Product;
 
@@ -39,10 +48,20 @@ class TransactionProductEloquent {
             'total_order' => $data['qty'] * $product->price,
             'payment_type' => $data['payment_type'],
             'status' => 1,
-            'account_bank_id' => $data['account_bank_id']
+            'account_bank_id' => $data['payment_type'] == 1 ? $data['account_bank_id'] : null
         ];
 
         $order = OrderProduct::create($dataOrder);
+
+        if ($data['payment_type'] == 2) {
+            $loan = $this->loanCreditProduct($data, $product);
+            OrderProductCredit::create([
+                'order_id' => (int)$order->id,
+                'loan_id' => (int)$loan,
+                'type' => (int)$data['type_credit']
+            ]);
+        }
+
 
         return array_merge($dataOrder,[
             'payment_label' => PaymentType::label($data['payment_type']),
@@ -99,6 +118,54 @@ class TransactionProductEloquent {
             'payment_label' => PaymentType::label($orderProduct->payment_type),
             'status_label' => StatusOrder::label(2),
         ];
+    }
+
+    public function loanCreditProduct($data, $product)
+    {
+        $account = Account::where('user_id', logged_in_user()->id)
+            ->where('type_account', TypeAccount::LOAN)
+            ->first();
+
+        $loan = Loan::create([
+            'account_id' => $account->id,
+            'type' => LoanType::KKB,
+            'total_loan' =>  ($product->price + ($product->price * 0.04)),
+            'tenors' => $data['type_credit'],
+            'tenor_type' => TenorType::MONTH,
+            'user_id' => logged_in_user()->id,
+            'status' => LoanMainStatus::NEW,
+        ]);
+
+        $step = '+1 month';
+        $range = '+'.$data['type_credit'].' month';
+        $start    = date('Y-m-d', strtotime($step));
+        $end      =  date('Y-m-d', strtotime($range, strtotime($start)));
+        $totalMonthLoan = count($this->dateRange( $start, $end, $step));
+        $totalLoanFinancing = ($product->price + ($product->price * 0.04)) / $totalMonthLoan;
+        foreach ($this->dateRange( $start, $end, $step) as $value) {
+            LoanListFinancing::create([
+                'loan_id' => $loan->id,
+                'total_installment' => $totalLoanFinancing,
+                'due_date' => $value,
+                'status' => LoanStatus::NOT_PAID
+            ]);
+        }
+
+        return $loan->id;
+    }
+
+    private function dateRange( $first, $last, $step = '+1 day', $format = 'Y-m-d' ) {
+        $dates = [];
+        $current = strtotime( $first );
+        $last = strtotime( $last );
+    
+        while( $current <= $last ) {
+    
+            $dates[] = date( $format, $current );
+            $current = strtotime( $step, $current );
+        }
+    
+        return $dates;
     }
 
 }

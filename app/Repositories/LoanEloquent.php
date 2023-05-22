@@ -21,9 +21,9 @@ class LoanEloquent {
     public function fetch($params =[])
     {
         $query = Customer::addSelect('users.*',
-                DB::raw("(SELECT id from loans where user_id = users.id and type = 1 and status in (1,2)) as pinjaman_1"),
-                DB::raw("(SELECT id from loans where user_id = users.id and type = 2 and status in (1,2)) as pinjaman_2"),
-                DB::raw("(SELECT id from loans where user_id = users.id and type = 3 and status in (1,2)) as pinjaman_3"),
+                DB::raw("(SELECT id from loans where user_id = users.id and type = 1 and status in (1,2)  limit 1 ) as pinjaman_1"),
+                DB::raw("(SELECT id from loans where user_id = users.id and type = 2 and status in (1,2)  limit 1 ) as pinjaman_2"),
+                DB::raw("(SELECT id from loans where user_id = users.id and type = 3 and status in (1,2)  limit 1 ) as pinjaman_3"),
         )->latest();
 
         if (isset($params['q'])) {
@@ -93,6 +93,8 @@ class LoanEloquent {
     public function submitTransaction($transactionId, $status)
     {
         $loanListTransaction = LoanListTransaction::find($transactionId);
+
+
         if ($status == 2) {
             LoanListTransaction::where('id', $loanListTransaction->id)->update([
                 'status' => 2,

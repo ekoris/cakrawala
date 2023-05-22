@@ -31,8 +31,14 @@ class UserRequest extends FormRequest
     public function data()
     {
         $data = $this->all();
-        if ($data['password']) {
+        if (isset($data['password'])) {
             $data['password'] = bcrypt($this->password);
+        }
+
+        if (isset($data['profile_picture'])) {
+            $profilePicture = time().'_'.$data['profile_picture']->getClientOriginalName();
+            $data['profile_picture']->storeAs('profil/'.logged_in_user()->id, $profilePicture, 'public');
+            $data['profile_picture'] = $profilePicture;
         }
 
         return $data;

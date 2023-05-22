@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Customer extends Model
 {
@@ -20,6 +21,11 @@ class Customer extends Model
         static::creating(function ($user) {
             $user->is_employee = 1;
         });
+    }
+
+    public function getUrlProfilePictureAttribute()
+    {
+        return Storage::disk('public')->url('profil/'.$this->user_id.'/'.$this->profile_picture);
     }
 
 }

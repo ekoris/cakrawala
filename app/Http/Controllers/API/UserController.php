@@ -19,8 +19,12 @@ class UserController extends BaseController
    
    public function info(Request $request)
    {
-      return $this->sendResponse(array_merge(logged_in_user()->toArray(),[
-         'total_saving' => logged_in_user()->total_saving
+      return $this->sendResponse(
+         array_merge(
+         logged_in_user()->toArray(),[
+         'total_saving' => logged_in_user()->total_saving,
+         'allow_credit' => $this->user->credit(),
+         'profile_picture' => logged_in_user()->url_profile_picture
       ]), 'Informasi User Login');
    }
 

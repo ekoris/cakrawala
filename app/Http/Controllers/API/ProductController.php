@@ -26,11 +26,16 @@ class ProductController extends BaseController
    public function detailProduct($idProduct)
    {
       $product = $this->product->find($idProduct);
-      return $this->sendResponse($product, '');
+      return $this->sendResponse($product, ($product != null ? 'data Berhasil ditampilkan' : 'Tidak ada data ditemukan') );
    }
 
    public function categoryProduct(Request $request)
    {
       return CategoryProductCollection::collection($this->product->fetchCategoryProduct($request->all()));
+   }
+
+   public function productByCategory(Request $request, $categoryId)
+   {
+      return ProductCollection::collection($this->product->fetchProductByCategory($request->all(), $categoryId));
    }
 }

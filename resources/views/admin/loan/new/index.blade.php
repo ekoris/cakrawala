@@ -69,7 +69,7 @@
                                         <td>{!! LoanType::labelHtml($item->type) !!}</td>
                                         <td><b>Rp {{ number_format($item->total_loan,0,'.','.') }}</b></td>
                                         <td>{{ $item->tenors.' '.TenorType::label($item->tenor_type) }}</td>
-                                        <td>{{ $item->collateral->name }}</td>
+                                        <td>{{ optional($item->collateral)->name }}</td>
                                         <td>{{ $item->account->name }}</td>
                                         <td>{{ $item->account->place_of_birth.', '.$item->account->date_of_birth }}</td>
                                         <td>{{ $item->account->nik }}</td>

@@ -76,7 +76,12 @@ class AccountEloquent {
             ]
         );
 
-        $account = Account::create($dataAccount);
+        $account = Account::updateOrCreate([
+            'user_id' => logged_in_user()->id,
+            'type_account' => $data['type_account']
+
+        ],
+        $dataAccount);
 
         $dataResponse = array_merge(
             $dataTemp,
