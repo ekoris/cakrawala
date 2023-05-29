@@ -31,6 +31,7 @@ class AuthController extends Controller
                 'address' => $request->address,
                 'is_employee' => 0,
                 'is_active' => 1,
+                'allow_credit' => resolve(\App\Repositories\API\UserEloquent::class)->credit(),
             ]);
 
             $data = [
