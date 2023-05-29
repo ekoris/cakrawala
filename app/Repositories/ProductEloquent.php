@@ -27,7 +27,7 @@ class ProductEloquent {
             'price' => $data['price'],
        ]);
 
-        if ($data['image']) {
+        if (($data['image'] ?? [])) {
             $fileNameIdentity = time().'_'.$data['image']->getClientOriginalName();
             $data['image']->storeAs('product/', $fileNameIdentity, 'public');
 
@@ -38,7 +38,7 @@ class ProductEloquent {
             ]);
         }
 
-        foreach ($data['file'] as $key => $value) {
+        foreach (($data['file'] ?? []) as $key => $value) {
             $fileNameIdentity = time().'_'.$value->getClientOriginalName();
             $value->storeAs('product/', $fileNameIdentity, 'public');
 
