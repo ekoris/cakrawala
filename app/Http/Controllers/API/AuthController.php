@@ -31,7 +31,6 @@ class AuthController extends Controller
                 'address' => $request->address,
                 'is_employee' => 0,
                 'is_active' => 1,
-                'allow_credit' => resolve(\App\Repositories\API\UserEloquent::class)->credit(),
             ]);
 
             $data = [
@@ -70,7 +69,8 @@ class AuthController extends Controller
             return response()->json([
                 'token' => $token,
                 'info' => array_merge(logged_in_user()->toArray(),[
-                    'total_saving' => logged_in_user()->total_saving
+                    'total_saving' => logged_in_user()->total_saving,
+                    'allow_credit' => resolve(\App\Repositories\API\UserEloquent::class)->credit(),
                 ])
             ], 200);
         } else {
