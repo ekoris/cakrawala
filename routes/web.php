@@ -149,5 +149,14 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('{user_id}/list/{type}', 'LoanController@list')->name('list');
 
         });
+
+        Route::group(['prefix' => 'client','as' => 'client.'], function() {
+            Route::get('/', 'ClientController@index')->name('index');
+        });
+
+        Route::group(['prefix' => 'officer','as' => 'officer.'], function() {
+            Route::get('/', 'OfficerController@index')->name('index');
+        });
+
     });
 });

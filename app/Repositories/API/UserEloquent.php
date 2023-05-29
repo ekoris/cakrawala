@@ -24,4 +24,13 @@ class UserEloquent {
 
         return false;
     }
+
+    public function updatePassword($data = [], $id)
+    {
+        User::where('id', $id)->update([
+            'password' => bcrypt($data['new_password'])
+        ]);
+
+        return User::find($id);
+    }
 }

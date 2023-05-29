@@ -7,6 +7,7 @@ use App\Http\Requests\API\UserRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Repositories\API\UserEloquent;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends BaseController
 {
@@ -33,6 +34,21 @@ class UserController extends BaseController
       try {
          $user = $this->user->update($request->data(), logged_in_user()->id);
          return $this->sendResponse($user, 'Data Berhasil di update');
+      } catch (\Throwable $th) {
+         throw $th;
+         return $this->sendError('data error');
+      }
+   }
+
+   public function updatePassword(Request $request)
+   {
+      try {
+         if (Hash::check($request->password, logged_in_user()->password)) {
+            $user = $this->user->updatePassword($request->all(), logged_in_user()->id);
+            return $this->sendResponse($user, 'Data Berhasil di update');
+         }else{
+            return $this->sendError('Password Lama anda tidak sama', logged_in_user(), 401);
+         }
       } catch (\Throwable $th) {
          throw $th;
          return $this->sendError('data error');
