@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('user_id')->nullable();
             $table->integer('total')->nullable();
             $table->integer('approver_id')->nullable();
+            $table->integer('status')->nullable();
             $table->timestamps();
         });
     }

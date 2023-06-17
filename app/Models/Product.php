@@ -27,7 +27,11 @@ class Product extends Model
     public function getUrlImageThumbnailAttribute()
     {
         $thumbnail = $this->hasOne(ProductPhoto::class,'product_id','id')->where('is_thumbnail', 1)->first();
+        if (!empty($thumbnail->attachment)) {
+            return Storage::disk('public')->url('product/'.$thumbnail->attachment);
+        }
 
-        return Storage::disk('public')->url('product/'.$thumbnail->attachment);
+        return '#';
+        
     }
 }

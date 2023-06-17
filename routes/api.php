@@ -50,6 +50,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 		Route::get('/category-product', 'ProductController@categoryProduct')->name('category-product');
 
 		Route::get('/history-transaction', 'HistoryTransactionController@index')->name('history-transaction');
+		Route::get('/bills', 'BillLoanController@index');
 		
 		Route::group(['prefix' => 'order'], function() {
 			Route::post('/', 'OrderController@order')->name('order');
@@ -82,6 +83,8 @@ Route::group(['middleware' => 'auth:api'], function () {
 			Route::get('/{loan_id}/loan-list-financing', 'LoanController@loanListFinancing')->name('loan-list-financing');
 		});
 
+		Route::get('/page-saving', 'MenuController@pageSaving')->name('page-saving');
+		Route::get('/page-loan', 'MenuController@pageLoan')->name('page-loan');
 
 	});
 

@@ -30,6 +30,10 @@ class TransactionProductEloquent {
             });
         }
 
+        if (isset($params['status'])) {
+            $query->where('status', $params['status']);
+        }
+
         if (isset($params['order_date'])) {
             $query->where('created_at','like','%'.$params['order_date'].'%');
         }
@@ -61,7 +65,6 @@ class TransactionProductEloquent {
                 'type' => (int)$data['type_credit']
             ]);
         }
-
 
         return array_merge($dataOrder,[
             'payment_label' => PaymentType::label($data['payment_type']),

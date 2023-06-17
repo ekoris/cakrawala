@@ -6,6 +6,7 @@ use App\Http\Constants\SavingTransactionStatus;
 use App\Http\Constants\SavingType;
 use App\Http\Constants\StatusAccount;
 use App\Http\Constants\TypeAccount;
+use App\Models\Account;
 use App\Models\SavingDeposit;
 use App\Models\SavingDepositTransaction;
 
@@ -13,12 +14,14 @@ class SavingEloquent {
 
     public function saving($data = [])
     {
+        $account = Account::where('user_id', logged_in_user()->id)->where('type_account', 1)->first();
+
         $savingDeposit = SavingDeposit::firstOrCreate(
                 [
-                    'account_id' => $data['account_id'],
+                    'account_id' => $account->id,
                     'type' => $data['type']
                 ],[
-                    'account_id' => $data['account_id'],
+                    'account_id' => $account->id,
                     'type' => $data['type'],
                     'user_id' => logged_in_user()->id
                 ]

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('total')->nullable();
             $table->integer('status')->nullable();
             $table->integer('type')->nullable();
+            $table->integer('type_transaction')->nullable();
             $table->timestamps();
         });
 

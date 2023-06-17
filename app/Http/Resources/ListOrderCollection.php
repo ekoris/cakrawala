@@ -21,6 +21,7 @@ class ListOrderCollection extends JsonResource
             'user_name' => optional($this->user)->name,
             'product_name' => optional($this->product)->name,
             'product_id' => optional($this->product)->id,
+            'product_image' => optional($this->product)->url_image_thumbnail,
             'qty' => $this->qty,
             'total_order' => $this->total_order,
             'payment_label' => PaymentType::label($this->payment_type),

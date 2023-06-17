@@ -16,6 +16,10 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->string('profile_picture')->nullable();
         });
+
+        Schema::table('history_transactions', function (Blueprint $table) {
+            $table->interger('user_id')->nullable();
+        });
     }
 
     /**
