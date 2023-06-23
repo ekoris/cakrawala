@@ -1,6 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +34,13 @@ Auth::routes();
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::group(['namespace' => 'App\Http\Controllers', 'as' => 'admin.'], function() {
+
+        Route::get('/logout', function () {
+            Session::flush();
+            Auth::logout();
+            return redirect('/');
+        })->name('logout');
+
         Route::group(['prefix' => 'user','as' => 'user.'], function() {
             Route::get('/', 'UserController@index')->name('index');
             Route::get('create', 'UserController@create')->name('create');

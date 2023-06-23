@@ -42,7 +42,7 @@
         <div class="sidebar-menu">
             <div class="sidebar-header">
                 <div class="logo">
-                    <a href="index.html"><img src="{{ asset('assets/images/icon/logo.png') }}" alt="logo"></a>
+                    <a href=""><img src="{{ asset('assets/images/icon/logo.png') }}" alt="logo"></a>
                 </div>
             </div>
             <div class="main-menu">
@@ -72,7 +72,7 @@
                     <div class="col-md-6 col-sm-4 clearfix">
                         <ul class="notification-area pull-right">
                             <li id="full-view"><i class="ti-fullscreen"></i></li>
-                            <li><a href=""><i class="fa fa-key"></i></a></li>
+                            <li><a href="{{ route('admin.logout') }}"><i class="fa fa-sign-out"></i></a></li>
                         </ul>
                     </div>
                 </div>
