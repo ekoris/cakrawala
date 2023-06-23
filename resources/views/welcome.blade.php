@@ -50,8 +50,8 @@
                     <div class="col-lg-6">
                         <!-- Mashead text and app badges-->
                         <div class="mb-5 mb-lg-0 text-center text-lg-start">
-                            <h1 class="display-1 lh-1 mb-3">Cakrawala Bima Sakti</h1>
-                            <p class="lead fw-normal text-muted mb-5">Launch your mobile app landing page faster with this free, open source theme from Start Bootstrap!</p>
+                            <h1 class="display-1 lh-1 mb-3">Rumah Baik Cakrawala</h1>
+                            <p class="lead fw-normal text-muted mb-5">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facere corporis perferendis non distinctio nemo iusto veniam cum accusantium quas ea laudantium, saepe consectetur. Repudiandae ex molestias molestiae nisi. Itaque, deleniti.</p>
                             <div class="d-flex flex-column flex-lg-row align-items-center">
                                 <a class="me-lg-3 mb-4 mb-lg-0" href="#!"><img class="app-badge" src="{{ asset('asset-homes/assets/img/google-play-badge.svg') }}" alt="..." /></a>
                                 <a href="#!"><img class="app-badge" src="{{ asset('asset-homes/assets/img/app-store-badge.svg') }}" alt="..." /></a>
