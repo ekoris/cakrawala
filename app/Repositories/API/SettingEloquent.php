@@ -31,9 +31,7 @@ class SettingEloquent {
             }else{
                 $cekLoan = Loan::where('user_id', logged_in_user()->id)
                     ->where(function($q){
-                        $q->where('status', 2)->orWhereHas('loanListFinancings', function($q){
-                           $q->where('status', '!=', 2); 
-                        });
+                        $q->where('status', 2);
                     })->first();
                 if ($cekLoan) {
                     return 4;

@@ -153,7 +153,7 @@ use App\Http\Constants\LoanTransactionStatus;
                         </table>
                     </div>
                     <div class="custom-pagination" style="padding-top: 20px"></div>
-                    {{-- {{ $listLoan->withQueryString()->links('layouts.pagination') }} --}}
+                    {{ $listLoanTransaction->withQueryString()->links('layouts.pagination') }}
                 </div>
                 <div class="col-sm-12 col-md-12">
                 </div>
