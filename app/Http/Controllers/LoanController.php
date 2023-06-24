@@ -34,15 +34,7 @@ class LoanController extends Controller
     {
         try {
             $transaction = $this->loan->findTransaction($transactionId);
-
-            if ($status == 3) {
-                $this->loan->submitTransaction($transactionId, $status);
-            }elseif ($transaction->loanListFinancing->status == LoanStatus::PAID) {
-                notice('error', 'Pembayaran Pinjaman ini sudah dilakukan !!, Ganti ke Tagihan lain');
-                return redirect()->route('admin.loan.transaction.edit-transaction', $transactionId);
-            }else{
-                $this->loan->submitTransaction($transactionId, $status);
-            }
+            $this->loan->submitTransaction($transactionId, $status);
         } catch (\Throwable $th) {
             throw $th;
         }
