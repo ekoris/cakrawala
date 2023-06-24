@@ -58,11 +58,18 @@ class LoanEloquent {
         $totalMonthLoan = count($this->dateRange( $start, $end, $step));
         $totalLoanFinancing = ($loan->total_loan + ($loan->total_loan * 0.04)) / $totalMonthLoan;
         foreach ($this->dateRange( $start, $end, $step) as $value) {
-            LoanListFinancing::create([
+            $loanT = LoanListFinancing::create([
                 'loan_id' => $loan->id,
                 'total_installment' => $totalLoanFinancing,
                 'due_date' => $value,
                 'status' => LoanStatus::NOT_PAID
+            ]);
+
+            LoanListTransaction::create([
+                'loan_list_financing_id' => $loanT->id,
+                'total' => $totalLoanFinancing,
+                'user_id' => logged_in_user()->id,
+                'status' => LoanTransactionStatus::PENDING
             ]);
         }
 
