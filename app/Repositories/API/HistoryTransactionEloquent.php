@@ -32,7 +32,7 @@ class HistoryTransactionEloquent {
             }
         }
 
-        foreach ($history->get() as $key => $value) {
+        foreach ($history->paginate(5) as $key => $value) {
             $data[] = [
                 'name' => $value->user->name,
                 'type_transaction' => $value->transaction_table == 'saving_deposit_transactions' ? SavingType::label($value->type_transaction) : LoanType::label($value->type_transaction),

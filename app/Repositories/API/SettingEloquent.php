@@ -34,9 +34,7 @@ class SettingEloquent {
                         $q->where('status', 2)->orWhereHas('loanListFinancings', function($q){
                            $q->where('status', '!=', 2); 
                         });
-                    })
-                    ->whereHas('')
-                    ->where('status', 2)->first();
+                    })->first();
                 if ($cekLoan) {
                     return 4;
                 }else{
