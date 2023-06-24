@@ -22,6 +22,10 @@ class LoanEloquent {
     {
         $account = Account::where('user_id', logged_in_user()->id)->where('type_account', TypeAccount::LOAN)->first();
 
+        if (!$account) {
+            return '';
+        }
+
         $loan = Loan::create(array_merge($data, [
             'user_id' => logged_in_user()->id,
             'status' => LoanMainStatus::NEW,
