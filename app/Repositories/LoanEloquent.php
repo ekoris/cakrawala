@@ -45,7 +45,9 @@ class LoanEloquent {
     
     public function fetchLoanNew($params = [])
     {
-        $query = Loan::has('account')->where('status', LoanMainStatus::NEW)->latest();
+        $query = Loan::whereHas('account', function($q){
+            $q->whereNotNull('market_id');
+        })->where('status', LoanMainStatus::NEW)->latest();
 
         if (isset($params['q'])) {
             $query->where('name','like','%'.$params['q'].'%');
