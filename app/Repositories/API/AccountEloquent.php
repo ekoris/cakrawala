@@ -72,7 +72,8 @@ class AccountEloquent {
                 'user_id' => logged_in_user()->id,
                 'identity_attachment' => $fileNameIdentity ?? null,
                 'self_photo' => $fileNameSelfPhoto ?? null,
-                'signature_photo' => $fileNameSignaturPhoto ?? null
+                'signature_photo' => $fileNameSignaturPhoto ?? null,
+                'status' => 2
             ]
         );
 
