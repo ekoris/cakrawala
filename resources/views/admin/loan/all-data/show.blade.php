@@ -117,25 +117,27 @@ use App\Http\Constants\LoanTransactionStatus;
                                     <tr>
                                         <td>
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                @if (in_array($item->status, [1,3]))
-                                                <a href="{{ route('admin.loan.all-data.submit', [
-                                                    $loan->user_id, 
-                                                    $loan->type, 
-                                                    $item->id, 
-                                                    2]) 
-                                                }}" title="Approve">
-                                                    <button type="button" class="btn btn-sm btn-outline-info"><i class="fa fa-check"></i></button>
-                                                </a>
-                                                @endif
-                                                @if (!in_array($item->status, [3]))
+                                                @if ($loan->status != 3)
+                                                    @if (in_array($item->status, [1,3]))
                                                     <a href="{{ route('admin.loan.all-data.submit', [
                                                         $loan->user_id, 
                                                         $loan->type, 
                                                         $item->id, 
-                                                        3]) 
-                                                }}" title="Batalkan" style="padding-left: 5px">
-                                                        <button type="button" class="btn btn-sm btn-outline-info"><i class="fa fa-close"></i></button>
+                                                        2]) 
+                                                    }}" title="Approve">
+                                                        <button type="button" class="btn btn-sm btn-outline-info"><i class="fa fa-check"></i></button>
                                                     </a>
+                                                    @endif
+                                                    @if (!in_array($item->status, [3]))
+                                                        <a href="{{ route('admin.loan.all-data.submit', [
+                                                            $loan->user_id, 
+                                                            $loan->type, 
+                                                            $item->id, 
+                                                            3]) 
+                                                    }}" title="Batalkan" style="padding-left: 5px">
+                                                            <button type="button" class="btn btn-sm btn-outline-info"><i class="fa fa-close"></i></button>
+                                                        </a>
+                                                    @endif
                                                 @endif
                                             </div>
                                         </td>
