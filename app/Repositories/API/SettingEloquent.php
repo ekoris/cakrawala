@@ -29,7 +29,14 @@ class SettingEloquent {
             if ($cekAccount->status == StatusAccount::PENDING) {
                 return 3;
             }else{
-                $cekLoan = Loan::where('user_id', logged_in_user()->id)->where('status', 2)->first();
+                $cekLoan = Loan::where('user_id', logged_in_user()->id)
+                    ->where(function($q){
+                        $q->where('status', 2)->orWhereHas('loanListFinancings', function($q){
+                           $q->where('status', '!=', 2); 
+                        });
+                    })
+                    ->whereHas('')
+                    ->where('status', 2)->first();
                 if ($cekLoan) {
                     return 4;
                 }else{

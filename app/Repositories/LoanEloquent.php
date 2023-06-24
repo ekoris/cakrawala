@@ -96,7 +96,6 @@ class LoanEloquent {
     {
         $loanListTransaction = LoanListTransaction::find($transactionId);
 
-
         if ($status == 2) {
             LoanListTransaction::where('id', $loanListTransaction->id)->update([
                 'status' => 2,
@@ -175,12 +174,11 @@ class LoanEloquent {
             }
 
         }
-
-        $this->finisLoan($loanListTransaction->loanListFinancing->loan_id);
-
-        return $loanListTransaction->update([
+        
+        $loanListTransaction->update([
             'loan_list_financing_id' => $listLoanNew
         ]);
+        $this->finisLoan($loanListTransaction->loanListFinancing->loan_id);
     }
 
     public function finisLoan($loanId)
