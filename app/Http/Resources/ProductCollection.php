@@ -21,6 +21,7 @@ class ProductCollection extends JsonResource
             'price' => $this->price,
             'category_id' => $this->category_id,
             'category_name' => optional($this->productCategory)->name,
+            'image_thumbnail' => $this->url_image_thumbnail,
             'photos' => $this->productPhotos->map(function ($product)  {
                 return [
                     'is_thumbnail' => $product->is_thumbnail,
