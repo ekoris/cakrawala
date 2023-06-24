@@ -108,7 +108,7 @@ use App\Http\Constants\LoanTransactionStatus;
                                     <th>Aksi</th>
                                     <th>Pembayaran Tagihan</th>
                                     <th>Total Dibayarkan</th>
-                                    <th>Tanggal Dibayar</th>
+                                    {{-- <th>Tanggal Dibayar</th> --}}
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -141,7 +141,7 @@ use App\Http\Constants\LoanTransactionStatus;
                                         </td>
                                         <td>{{ $item->loanListFinancing->due_date }}</td>
                                         <td>Rp {{ number_format($item->total,0,',','.') }}</td>
-                                        <td>{{ $item->created_at }}</td>
+                                        {{-- <td>{{ $item->created_at }}</td> --}}
                                         <td>{!! LoanTransactionStatus::labelHtml($item->status) !!}</td>
                                     </tr>
                                 @empty

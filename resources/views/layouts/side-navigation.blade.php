@@ -72,11 +72,11 @@
                 <span class="badge badge-danger right">{{ $navigation['new_loan'] }}</span>
             </a>
         </li>
-        <li class="{{ Route::is('admin.loan.transaction.*') ? 'active' : '' }}">
+        {{-- <li class="{{ Route::is('admin.loan.transaction.*') ? 'active' : '' }}">
             <a href="{{ route('admin.loan.transaction.index') }}">Pembayaran Pinjaman Baru
                 <span class="badge badge-danger right">{{ $navigation['new_loan_transaction'] }}</span>
             </a>
-        </li>
+        </li> --}}
     </ul>
 </li>
 <li class="{{ Route::is('admin.master-market.*') ? 'active' : '' }}">
