@@ -46,7 +46,7 @@ class LoanController extends Controller
         } catch (\Throwable $th) {
             throw $th;
         }
-        return redirect()->route('admin.loan.all-data.show', [$id, $type]);
+        return redirect()->route('admin.loan.all-data.show', $transaction->loanListFinancing->loan_id);
     }
 
     public function newLoan(Request $request)
